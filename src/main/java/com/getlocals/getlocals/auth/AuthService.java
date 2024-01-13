@@ -80,7 +80,7 @@ public class AuthService {
 
     private AuthenticationResponse getAuthToken(User user) {
         var extraClaims = new HashMap<String, Object>();
-        extraClaims.put("roles", user.getRolesString());
+        extraClaims.put("scope", user.getRolesString());
         extraClaims.put("name", user.getName());
         return AuthenticationResponse.builder()
                 .token(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY))

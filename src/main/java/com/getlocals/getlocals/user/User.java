@@ -1,6 +1,5 @@
 package com.getlocals.getlocals.user;
 
-import com.getlocals.getlocals.business.Business;
 import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.utils.DTO;
 import jakarta.persistence.*;
@@ -43,7 +42,7 @@ public class User implements Serializable {
         var res = new ArrayList<String>();
 
         for (Role role : roles) {
-            res.add("ROLE_"+role.getRole());
+            res.add(role.getRole());
         }
 
         return res;

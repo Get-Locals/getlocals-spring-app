@@ -3,14 +3,12 @@ package com.getlocals.getlocals.business;
 
 import com.getlocals.getlocals.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Data;`
 import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class Business {
 
     @Id
