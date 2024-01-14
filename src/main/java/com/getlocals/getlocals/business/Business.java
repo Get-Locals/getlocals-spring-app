@@ -5,9 +5,7 @@ import com.getlocals.getlocals.business.item.Item;
 import com.getlocals.getlocals.user.User;
 import com.getlocals.getlocals.utils.CustomEnums;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -15,7 +13,8 @@ import java.util.Collection;
 @Data
 @Entity
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Business implements Serializable {
 
     @Id
@@ -36,8 +35,6 @@ public class Business implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Item> items;
 
-    @Lob
-    @Column(name = "logo", nullable = false)
-    private byte[] logo;
+    private String logo;
 
 }

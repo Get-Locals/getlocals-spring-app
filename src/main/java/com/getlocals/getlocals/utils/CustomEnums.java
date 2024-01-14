@@ -11,7 +11,7 @@ public class CustomEnums {
         OTHER("OTHER")
         ;
 
-        private final String val;
+        String val;
 
         BusinessServicesEnum(String val) {
             this.val = val;

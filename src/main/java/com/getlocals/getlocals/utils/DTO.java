@@ -51,6 +51,7 @@ public class DTO {
         private String location;
         private String currency;
         private byte[] logo;
+        private String businessType;
     }
 
 
