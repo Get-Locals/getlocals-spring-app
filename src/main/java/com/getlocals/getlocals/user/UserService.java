@@ -19,4 +19,9 @@ public class UserService {
         var user = userRepository.findByEmail(authService.getLoggedInUserEmail());
         return user.getUserDTO();
     }
+
+    public User getLoggedInUserEntity() {
+
+        return userRepository.findByEmail(authService.getLoggedInUserEmail());
+    }
 }
