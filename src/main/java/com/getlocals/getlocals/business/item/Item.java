@@ -1,9 +1,8 @@
 package com.getlocals.getlocals.business.item;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getlocals.getlocals.business.Business;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,5 +20,10 @@ public class Item implements Serializable {
     private String name;
     private float price;
     private String currency;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "business_id")
+    @JsonIgnore
+    private Business business;
 
 }

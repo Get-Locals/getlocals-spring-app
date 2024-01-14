@@ -49,6 +49,7 @@ public class WebConfiguration {
                             "/role/all",
                             "/api/auth/**"
                     ).permitAll();
+                    request.requestMatchers("/error").permitAll();
                     request.requestMatchers("/auth/**").authenticated();
                     request.requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "OWNER", "MANAGER");
                 })

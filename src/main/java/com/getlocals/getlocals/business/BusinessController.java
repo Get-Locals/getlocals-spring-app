@@ -37,7 +37,7 @@ public class BusinessController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER')")
-    public ResponseEntity<Business> getBusiness(@PathVariable("id") String businessId) {
+    public ResponseEntity<DTO.BusinessRegisterDTO> getBusiness(@PathVariable("id") String businessId) {
         return ResponseEntity.ok(businessService.getBusinessById(businessId));
     }
 }

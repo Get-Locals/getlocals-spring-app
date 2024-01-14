@@ -32,7 +32,7 @@ public class Business implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private CustomEnums.BusinessServicesEnum serviceType;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     private Collection<Item> items;
 
     private String logo;
