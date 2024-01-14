@@ -6,6 +6,7 @@ import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
 import com.getlocals.getlocals.user.User;
 import com.getlocals.getlocals.user.UserRepository;
+import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AuthService {
     private final Long DAY = (long) (1000*60*60*24);
 
     public AuthenticationResponse register(DTO.UserRegisterDTO registerDTO) {
-        Role userRole = roleRepository.findByRole("USER");
+        Role userRole = roleRepository.findByRole(CustomEnums.RolesEnum.USER.getVal());
         var user = User.builder()
                 .isActive(false)
                 .name(registerDTO.getName())

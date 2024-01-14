@@ -20,6 +20,8 @@ public class Item implements Serializable {
     private String name;
     private float price;
     private String currency;
+    private String ingredients;
+    private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "business_id")

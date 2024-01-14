@@ -37,4 +37,11 @@ public class Business implements Serializable {
 
     private String logo;
 
+    private String uberUrl;
+    private String skipUrl;
+    private String doorDashUrl;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private BusinessTimings businessTimings;
+
 }

@@ -8,10 +8,9 @@ public class CustomEnums {
     public enum BusinessServicesEnum {
         FOOD("FOOD"),
         PERSONAL_CARE("PERSONAL_CARE"),
-        OTHER("OTHER")
-        ;
+        OTHER("OTHER");
 
-        String val;
+        private final String val;
 
         BusinessServicesEnum(String val) {
             this.val = val;
@@ -29,6 +28,18 @@ public class CustomEnums {
         private final String val;
 
         RolesEnum(String val) {
+            this.val = val;
+        }
+    }
+
+    @Getter
+    public enum BusinessTiming {
+        OPEN("OPEN"),
+        CLOSE("CLOSE");
+
+        private final String val;
+
+        BusinessTiming(String val) {
             this.val = val;
         }
     }

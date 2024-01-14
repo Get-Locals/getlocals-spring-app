@@ -1,4 +1,4 @@
-package com.getlocals.getlocals.business;
+package com.getlocals.getlocals.business.info;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,4 +18,7 @@ public class ContactInformation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String email;
+    private String phone1;
+    private String phone2;
 }
