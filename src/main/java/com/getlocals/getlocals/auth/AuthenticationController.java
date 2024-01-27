@@ -14,25 +14,32 @@ public class AuthenticationController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> createUser(
             @RequestBody DTO.UserRegisterDTO registerDTO
             ) {
         return ResponseEntity.ok(authService.register(registerDTO));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/authenticate/")
     public ResponseEntity<AuthenticationResponse> authenticateUser(
             @RequestBody DTO.UserAuthDTO authDTO
             ) {
         return ResponseEntity.ok(authService.authenticate(authDTO));
     }
 
-    @PostMapping("/refresh-token")
+    @PostMapping("/refresh-token/")
     public ResponseEntity<AuthenticationResponse> refreshAuthToken(
             @RequestParam String refreshToken
     ) {
         return ResponseEntity.ok(authService.refreshToken(refreshToken));
+    }
+
+    @GetMapping("/validate_token")
+    public ResponseEntity<Boolean> validate_token(
+            @RequestParam String token
+    ) {
+        return ResponseEntity.ok(authService.validate_token(token));
     }
 
 

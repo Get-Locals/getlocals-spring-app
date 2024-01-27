@@ -65,7 +65,7 @@ public class AuthService {
                     )
             );
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
         var user = userRepository.findByEmail(authDTO.getEmail());
         return getAuthToken(user);
@@ -84,8 +84,10 @@ public class AuthService {
         extraClaims.put("scope", user.getRolesString());
         extraClaims.put("name", user.getName());
         return AuthenticationResponse.builder()
-                .token(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY))
-                .refreshToken(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY * 2))
+                .access(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY))
+                .refresh(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY * 7))
+                .name(user.getName())
+                .username(user.getEmail())
                 .build();
     }
 
@@ -93,5 +95,9 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         return principal.getUsername();
+    }
+
+    public Boolean validate_token(String token) {
+        return jwtService.validateToken(token, getLoggedInUserEmail());
     }
 }

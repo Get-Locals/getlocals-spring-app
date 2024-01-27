@@ -37,10 +37,10 @@ public class JWTService {
 
     public Boolean validateToken(
             String token,
-            UserDetails userDetails
+            String username
     ) {
         final String email = extractEmail(token);
-        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return email.equals(username) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -68,6 +68,5 @@ public class JWTService {
     private Key getSigingKey() {
         byte[] secret_bytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(secret_bytes);
-
     }
 }
