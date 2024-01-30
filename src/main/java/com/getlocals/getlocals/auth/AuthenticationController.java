@@ -35,9 +35,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(authService.refreshToken(refreshToken));
     }
 
-    @GetMapping("/validate_token")
+    @GetMapping("/validate-token/{token}/")
     public ResponseEntity<Boolean> validate_token(
-            @RequestParam String token
+            @PathVariable String token
     ) {
         return ResponseEntity.ok(authService.validate_token(token));
     }
