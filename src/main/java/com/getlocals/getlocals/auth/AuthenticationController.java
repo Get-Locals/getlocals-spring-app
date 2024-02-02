@@ -15,17 +15,17 @@ public class AuthenticationController {
     private AuthService authService;
 
     @PostMapping("/register/")
-    public ResponseEntity<AuthenticationResponse> createUser(
+    public ResponseEntity<?> registerUser(
             @RequestBody DTO.UserRegisterDTO registerDTO
             ) {
-        return ResponseEntity.ok(authService.register(registerDTO));
+        return authService.register(registerDTO);
     }
 
     @PostMapping("/authenticate/")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(
+    public ResponseEntity<?> authenticateUser(
             @RequestBody DTO.UserAuthDTO authDTO
             ) {
-        return ResponseEntity.ok(authService.authenticate(authDTO));
+        return authService.authenticate(authDTO);
     }
 
     @PostMapping("/refresh-token/")

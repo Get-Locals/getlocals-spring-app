@@ -16,12 +16,12 @@ public class UserService {
 
     public DTO.UserDTO getLoggedInUser() {
 
-        var user = userRepository.findByEmail(authService.getLoggedInUserEmail());
+        var user = userRepository.findByEmail(authService.getLoggedInUserEmail()).get();
         return user.getUserDTO();
     }
 
     public User getLoggedInUserEntity() {
 
-        return userRepository.findByEmail(authService.getLoggedInUserEmail());
+        return userRepository.findByEmail(authService.getLoggedInUserEmail()).get();
     }
 }

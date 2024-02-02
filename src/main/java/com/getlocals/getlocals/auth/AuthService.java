@@ -10,6 +10,8 @@ import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,7 +43,10 @@ public class AuthService {
 
     private final Long DAY = (long) (1000*60*60*24);
 
-    public AuthenticationResponse register(DTO.UserRegisterDTO registerDTO) {
+    public ResponseEntity<?> register(DTO.UserRegisterDTO registerDTO) {
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
+            return new ResponseEntity<>("User already exists with that email", HttpStatus.CONFLICT);
+        }
         Role userRole = roleRepository.findByRole(CustomEnums.RolesEnum.USER.getVal());
         var user = User.builder()
                 .isActive(false)
@@ -51,11 +56,11 @@ public class AuthService {
                 .roles(List.of(userRole))
                 .build();
         userRepository.save(user);
-        return getAuthToken(user);
+        return ResponseEntity.ok(getAuthToken(user));
 
     }
 
-    public AuthenticationResponse authenticate(DTO.UserAuthDTO authDTO) {
+    public ResponseEntity<?> authenticate(DTO.UserAuthDTO authDTO) {
 
         try {
             authenticationManager.authenticate(
@@ -65,10 +70,10 @@ public class AuthService {
                     )
             );
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
-        var user = userRepository.findByEmail(authDTO.getEmail());
-        return getAuthToken(user);
+        var user = userRepository.findByEmail(authDTO.getEmail()).get();
+        return ResponseEntity.ok(getAuthToken(user));
 
     }
 
@@ -76,7 +81,7 @@ public class AuthService {
     public AuthenticationResponse refreshToken(String refreshToken) {
         var email = jwtService.extractEmail(refreshToken);
         var user = userRepository.findByEmail(email);
-        return getAuthToken(user);
+        return getAuthToken(user.get());
     }
 
     private AuthenticationResponse getAuthToken(User user) {
