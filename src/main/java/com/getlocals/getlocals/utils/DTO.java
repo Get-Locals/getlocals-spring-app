@@ -1,16 +1,12 @@
 package com.getlocals.getlocals.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Collection;
-import java.util.List;
 
 public class DTO {
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -20,7 +16,7 @@ public class DTO {
         private String password;
     }
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -29,7 +25,7 @@ public class DTO {
         private String password;
     }
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -41,7 +37,7 @@ public class DTO {
     }
 
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -55,7 +51,7 @@ public class DTO {
     }
 
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -66,12 +62,21 @@ public class DTO {
         private String currency;
     }
 
-    @Data
+    @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AddItemBusinessDTO {
         Collection<AddItemDTO> items;
         private String business;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessTypeDTO {
+        private String value;
+        private String label;
     }
 }

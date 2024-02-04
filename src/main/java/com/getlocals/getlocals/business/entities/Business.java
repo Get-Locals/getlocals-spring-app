@@ -1,7 +1,6 @@
-package com.getlocals.getlocals.business;
+package com.getlocals.getlocals.business.entities;
 
 
-import com.getlocals.getlocals.business.item.Item;
 import com.getlocals.getlocals.user.User;
 import com.getlocals.getlocals.utils.CustomEnums;
 import jakarta.persistence.*;

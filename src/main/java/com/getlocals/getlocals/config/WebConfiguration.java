@@ -57,7 +57,8 @@ public class WebConfiguration {
                     request.requestMatchers(
                             "/user/register",
                             "/role/all",
-                            "/api/auth/**"
+                            "/api/auth/**",
+                            "/api/business/types/"
                     ).permitAll();
                     request.requestMatchers("/error").permitAll();
                     request.requestMatchers("/api/**").authenticated();
@@ -91,13 +92,13 @@ public class WebConfiguration {
         config.addAllowedOrigin("http://127.0.0.1:3000");
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
-        config.addAllowedMethod("OPTIONS");
-        config.addAllowedMethod("HEAD");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("DELETE");
-        config.addAllowedMethod("PATCH");
+        config.addAllowedMethod(HttpMethod.OPTIONS);
+        config.addAllowedMethod(HttpMethod.HEAD);
+        config.addAllowedMethod(HttpMethod.GET);
+        config.addAllowedMethod(HttpMethod.PUT);
+        config.addAllowedMethod(HttpMethod.POST);
+        config.addAllowedMethod(HttpMethod.DELETE);
+        config.addAllowedMethod(HttpMethod.PATCH);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

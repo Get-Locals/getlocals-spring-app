@@ -1,4 +1,4 @@
-package com.getlocals.getlocals.business;
+package com.getlocals.getlocals.business.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

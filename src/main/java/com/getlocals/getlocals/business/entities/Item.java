@@ -1,7 +1,6 @@
-package com.getlocals.getlocals.business.item;
+package com.getlocals.getlocals.business.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getlocals.getlocals.business.Business;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.getlocals.getlocals.business.info;
+package com.getlocals.getlocals.business.entities;
 
 import jakarta.persistence.Entity;
 

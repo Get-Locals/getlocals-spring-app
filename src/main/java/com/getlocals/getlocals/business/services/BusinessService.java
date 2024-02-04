@@ -1,9 +1,13 @@
-package com.getlocals.getlocals.business;
+package com.getlocals.getlocals.business.services;
 
 import com.getlocals.getlocals.auth.AuthService;
 import com.getlocals.getlocals.auth.AuthenticationResponse;
-import com.getlocals.getlocals.business.item.Item;
-import com.getlocals.getlocals.business.item.ItemRepository;
+import com.getlocals.getlocals.business.entities.Business;
+import com.getlocals.getlocals.business.entities.BusinessType;
+import com.getlocals.getlocals.business.entities.Item;
+import com.getlocals.getlocals.business.repositories.BusinessTypeRepository;
+import com.getlocals.getlocals.business.repositories.ItemRepository;
+import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
 import com.getlocals.getlocals.user.User;
@@ -39,6 +43,9 @@ public class BusinessService {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private BusinessTypeRepository businessTypeRepository;
 
 
     @Transactional
@@ -92,5 +99,39 @@ public class BusinessService {
                 .name(business.getName())
                 .location(business.getLocation())
                 .build();
+    }
+
+    public List<DTO.BusinessTypeDTO> getTypes() {
+        var types = businessTypeRepository.findAll();
+        List<DTO.BusinessTypeDTO> res = new ArrayList<>();
+        for (BusinessType type : types) {
+            res.add(DTO.BusinessTypeDTO.builder()
+                    .value(type.getVal())
+                    .label(type.getLabel())
+                    .build());
+        }
+        return res;
+    }
+
+    public void createTypes(String item) {
+        if (item == null) {
+            businessTypeRepository.saveAll(List.of(
+                    BusinessType.builder()
+                            .val("FOOD")
+                            .label("Food")
+                            .build(),
+                    BusinessType.builder()
+                            .val("Personal Care".toUpperCase())
+                            .label("Personal_Care")
+                            .build()
+            ));
+        } else {
+            businessTypeRepository.save(
+                    BusinessType.builder()
+                            .val(item.toUpperCase())
+                            .label(item)
+                            .build()
+            );
+        }
     }
 }
