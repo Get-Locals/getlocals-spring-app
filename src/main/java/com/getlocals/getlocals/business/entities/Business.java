@@ -43,4 +43,15 @@ public class Business implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private BusinessTimings businessTimings;
 
+    public String getOwnerName() {
+        return this.owner.getName();
+    }
+
+    public String getManagerName() {
+        if (this.manager != null)
+            return this.manager.getName();
+        else
+            return "No Manager Assigned";
+    }
+
 }
