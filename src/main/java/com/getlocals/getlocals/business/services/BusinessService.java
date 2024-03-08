@@ -16,12 +16,16 @@ import com.getlocals.getlocals.user.UserService;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import jakarta.transaction.Transactional;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BusinessService {
@@ -98,6 +102,7 @@ public class BusinessService {
                 .businessType(business.getServiceType().getVal())
                 .name(business.getName())
                 .location(business.getLocation())
+                .aboutUs(business.getAboutUs())
                 .build();
     }
 
@@ -121,8 +126,8 @@ public class BusinessService {
                             .label("Food")
                             .build(),
                     BusinessType.builder()
-                            .val("Personal Care".toUpperCase())
-                            .label("Personal_Care")
+                            .val("PERSONAL_CARE".toUpperCase())
+                            .label("Personal Care")
                             .build()
             ));
         } else {
@@ -133,5 +138,16 @@ public class BusinessService {
                             .build()
             );
         }
+    }
+
+    public ResponseEntity<?> updateBusiness(String aboutUs, String id) {
+        Optional<Business> optionalBusiness = businessRepository.findById(id);
+        if (optionalBusiness.isEmpty())
+            return ResponseEntity.badRequest().body("Business not found");
+        Business business = optionalBusiness.get();
+        business.setAboutUs(aboutUs);
+        businessRepository.save(business);
+        return new ResponseEntity<>(DTO.StringMessage.builder()
+                .message("Updated Successfully").build(), HttpStatus.OK);
     }
 }

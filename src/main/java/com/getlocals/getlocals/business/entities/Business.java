@@ -35,6 +35,7 @@ public class Business implements Serializable {
     private Collection<Item> items;
 
     private String logo;
+    private String aboutUs;
 
     private String uberUrl;
     private String skipUrl;

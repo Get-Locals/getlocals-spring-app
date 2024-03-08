@@ -3,6 +3,7 @@ package com.getlocals.getlocals.utils;
 import lombok.*;
 
 import java.util.Collection;
+import java.util.List;
 
 public class DTO {
 
@@ -48,6 +49,8 @@ public class DTO {
         private String currency;
         private byte[] logo;
         private String businessType;
+        private String aboutUs;
+
     }
 
 
@@ -78,5 +81,46 @@ public class DTO {
     public static class BusinessTypeDTO {
         private String value;
         private String label;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessDTO {
+        private String name;
+        private String serviceType;
+        private String doordashURL;
+        private String skipURL;
+        private String uberURL;
+        private UserDTO owner;
+        private UserDTO manager;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessInfoDTO {
+        private String name;
+        private String id;
+    }
+
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserProfileDTO {
+        private UserDTO user;
+        private List<BusinessInfoDTO> businesses;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class StringMessage {
+        private String message;
     }
 }

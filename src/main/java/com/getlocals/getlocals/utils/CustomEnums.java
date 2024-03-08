@@ -43,4 +43,18 @@ public class CustomEnums {
             this.val = val;
         }
     }
+
+    @Getter
+    public enum BusinessFieldsEnum {
+        ABOUT_US("ABOUT_US"),
+        BUSINESS_TIMINGS("BUSINESS_TIMINGS"),
+        URLS("URLS"),
+        LOCATION("LOCATION");
+
+        private final String val;
+
+        BusinessFieldsEnum(String val) {
+            this.val = val;
+        }
+    }
 }

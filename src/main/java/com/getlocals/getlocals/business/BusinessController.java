@@ -2,6 +2,7 @@ package com.getlocals.getlocals.business;
 
 import com.getlocals.getlocals.auth.AuthenticationResponse;
 import com.getlocals.getlocals.business.services.BusinessService;
+import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -51,5 +52,11 @@ public class BusinessController {
     public ResponseEntity<String> createItems(@RequestParam(required = false) String item) {
         businessService.createTypes(item);
         return ResponseEntity.ok("Created");
+    }
+
+    @PutMapping("/about-us/{businessId}/")
+    public ResponseEntity<?> updateAboutUsBusiness(@RequestParam String aboutUs,
+                                                   @PathVariable("businessId") String id) {
+        return businessService.updateBusiness(aboutUs, id);
     }
 }

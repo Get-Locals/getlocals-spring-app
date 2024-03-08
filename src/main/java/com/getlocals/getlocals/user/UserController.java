@@ -19,4 +19,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getLoggedInUser());
     }
 
+    @GetMapping("/user-profile/")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getUserProfile() {
+        return userService.getUserProfile();
+    }
+
 }
