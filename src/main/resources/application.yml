@@ -10,6 +10,12 @@ spring:
       ddl-auto: update
 
 # Logging
-#logging:
-#  level:
+logging:
+  level:
+    org.springframework:
+      security: INFO
+      web: DEBUG
+      boot: INFO
+    org.hibernate: ERROR
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 

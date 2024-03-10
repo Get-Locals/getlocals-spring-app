@@ -1,6 +1,7 @@
 package com.getlocals.getlocals.business;
 
 import com.getlocals.getlocals.auth.AuthenticationResponse;
+import com.getlocals.getlocals.business.services.BusinessImageService;
 import com.getlocals.getlocals.business.services.BusinessService;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
@@ -9,7 +10,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,9 @@ public class BusinessController {
 
     @Autowired
     private BusinessService businessService;
+
+    @Autowired
+    private BusinessImageService businessImageService;
 
     @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> registerBusiness(
@@ -58,5 +65,31 @@ public class BusinessController {
     public ResponseEntity<?> updateAboutUsBusiness(@RequestParam String aboutUs,
                                                    @PathVariable("businessId") String id) {
         return businessService.updateBusiness(aboutUs, id);
+    }
+
+    @PostMapping(value = "/{id}/upload/{type}/")
+    public ResponseEntity<?> uploadImage(
+            @PathVariable("id") String id,
+            @RequestPart("file") MultipartFile file,
+            @PathVariable("type") CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
+        businessImageService.uploadImage(id, file, type);
+
+        return ResponseEntity.ok(DTO.StringMessage.builder().message("Uploaded Successfully").build());
+    }
+
+    @GetMapping("/{id}/images/{type}/")
+    public ResponseEntity<?> getBusinessImages(
+            @PathVariable("id") String id,
+            @PathVariable("type") CustomEnums.BusinessImageTypeEnum type) {
+        return businessImageService.getImages(id, type);
+    }
+
+    @DeleteMapping("/image/{id}/")
+    public ResponseEntity<?> deleteImage(@PathVariable("id") String id) {
+        businessImageService.deleteImage(id);
+        return ResponseEntity.ok(DTO.StringMessage
+                .builder()
+                .message("Deleted Successfully")
+                .build());
     }
 }

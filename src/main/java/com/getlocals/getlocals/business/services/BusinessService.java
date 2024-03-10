@@ -5,9 +5,10 @@ import com.getlocals.getlocals.auth.AuthenticationResponse;
 import com.getlocals.getlocals.business.entities.Business;
 import com.getlocals.getlocals.business.entities.BusinessType;
 import com.getlocals.getlocals.business.entities.Item;
+import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
+import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.business.repositories.BusinessTypeRepository;
 import com.getlocals.getlocals.business.repositories.ItemRepository;
-import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
 import com.getlocals.getlocals.user.User;
@@ -16,7 +17,6 @@ import com.getlocals.getlocals.user.UserService;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import jakarta.transaction.Transactional;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +50,9 @@ public class BusinessService {
 
     @Autowired
     private BusinessTypeRepository businessTypeRepository;
+
+    @Autowired
+    private BusinessImageRepository businessImageRepository;
 
 
     @Transactional

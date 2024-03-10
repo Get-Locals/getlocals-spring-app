@@ -4,7 +4,10 @@ package com.getlocals.getlocals.business.entities;
 import com.getlocals.getlocals.user.User;
 import com.getlocals.getlocals.utils.CustomEnums;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,7 +34,7 @@ public class Business implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private CustomEnums.BusinessServicesEnum serviceType;
 
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Item> items;
 
     private String logo;
@@ -54,5 +57,6 @@ public class Business implements Serializable {
         else
             return "No Manager Assigned";
     }
+
 
 }

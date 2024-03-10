@@ -2,6 +2,7 @@ package com.getlocals.getlocals.utils;
 
 import lombok.*;
 
+import java.sql.Blob;
 import java.util.Collection;
 import java.util.List;
 
@@ -122,5 +123,17 @@ public class DTO {
     @NoArgsConstructor
     public static class StringMessage {
         private String message;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessImageDTO {
+        private String id;
+        private String name;
+        private String image;
+        private String extension;
+        private CustomEnums.BusinessImageTypeEnum type;
     }
 }

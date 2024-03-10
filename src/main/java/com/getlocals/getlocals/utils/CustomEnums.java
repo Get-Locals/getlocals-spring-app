@@ -1,10 +1,12 @@
 package com.getlocals.getlocals.utils;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class CustomEnums {
 
     @Getter
+    @AllArgsConstructor
     public enum BusinessServicesEnum {
         FOOD("FOOD"),
         PERSONAL_CARE("PERSONAL_CARE"),
@@ -12,13 +14,10 @@ public class CustomEnums {
 
         private final String val;
 
-        BusinessServicesEnum(String val) {
-            this.val = val;
-        }
-
     }
 
     @Getter
+    @AllArgsConstructor
     public enum RolesEnum {
         OWNER("OWNER"),
         USER("USER"),
@@ -26,25 +25,30 @@ public class CustomEnums {
         ADMIN("ADMIN");
 
         private final String val;
-
-        RolesEnum(String val) {
-            this.val = val;
-        }
     }
 
     @Getter
-    public enum BusinessTiming {
+    @AllArgsConstructor
+    public enum BusinessTimingEnum {
         OPEN("OPEN"),
         CLOSE("CLOSE");
 
         private final String val;
+    }
+    
+    @Getter
+    @AllArgsConstructor
+    public enum BusinessImageTypeEnum {
+        CAROUSEL("CAROUSEL"),
+        MENU("MENU"),
+        LOGO("LOGO"),
+        TEAM("TEAM");
 
-        BusinessTiming(String val) {
-            this.val = val;
-        }
+        private final String val;
     }
 
     @Getter
+    @AllArgsConstructor
     public enum BusinessFieldsEnum {
         ABOUT_US("ABOUT_US"),
         BUSINESS_TIMINGS("BUSINESS_TIMINGS"),
@@ -52,9 +56,5 @@ public class CustomEnums {
         LOCATION("LOCATION");
 
         private final String val;
-
-        BusinessFieldsEnum(String val) {
-            this.val = val;
-        }
     }
 }
