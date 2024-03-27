@@ -27,7 +27,7 @@ public class BusinessImageService {
     private BusinessImageRepository businessImageRepository;
 
 
-    public void uploadImage(String id, MultipartFile file, CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
+    public ResponseEntity<?> uploadImage(String id, MultipartFile file, CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
         var businessImage = BusinessImage.builder()
                 .imageData(new SerialBlob(file.getBytes()))
                 .business(businessRepository.getReferenceById(id))
@@ -36,6 +36,9 @@ public class BusinessImageService {
                 .type(type)
                 .build();
         businessImageRepository.save(businessImage);
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder().message(businessImage.getId()).build()
+        );
 
     }
 

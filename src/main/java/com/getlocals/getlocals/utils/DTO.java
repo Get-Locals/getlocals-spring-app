@@ -136,4 +136,29 @@ public class DTO {
         private String extension;
         private CustomEnums.BusinessImageTypeEnum type;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemCategoryDTO {
+        private String id;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MenuDTO {
+        private String id;
+        private String name;
+        private float price;
+        private String imageId;
+        private String currency;
+        private String ingredients;
+        private String description;
+        private BusinessImageDTO image;
+    }
 }

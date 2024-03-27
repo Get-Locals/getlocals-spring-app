@@ -3,6 +3,8 @@ package com.getlocals.getlocals.business;
 import com.getlocals.getlocals.auth.AuthenticationResponse;
 import com.getlocals.getlocals.business.services.BusinessImageService;
 import com.getlocals.getlocals.business.services.BusinessService;
+import com.getlocals.getlocals.business.services.ItemCategoryService;
+import com.getlocals.getlocals.business.services.ItemService;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,12 @@ public class BusinessController {
 
     @Autowired
     private BusinessImageService businessImageService;
+
+    @Autowired
+    private ItemCategoryService itemCategoryService;
+
+    @Autowired
+    private ItemService itemService;
 
     @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> registerBusiness(
@@ -72,9 +80,9 @@ public class BusinessController {
             @PathVariable("id") String id,
             @RequestPart("file") MultipartFile file,
             @PathVariable("type") CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
-        businessImageService.uploadImage(id, file, type);
 
-        return ResponseEntity.ok(DTO.StringMessage.builder().message("Uploaded Successfully").build());
+
+        return businessImageService.uploadImage(id, file, type);
     }
 
     @GetMapping("/{id}/images/{type}/")
@@ -91,5 +99,51 @@ public class BusinessController {
                 .builder()
                 .message("Deleted Successfully")
                 .build());
+    }
+
+    @GetMapping("/{id}/item-category/")
+    public ResponseEntity<?> getBusinessItemCategories(
+            @PathVariable("id") String businessId
+    ) {
+        return itemCategoryService.getAll(businessId);
+    }
+
+    @PostMapping("/{id}/item-category/")
+    public ResponseEntity<?> createItemCategory(
+            @RequestParam("name") String name,
+            @PathVariable("id") String businessId
+            ) {
+
+        itemCategoryService.createItemCategory(name, businessId);
+
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder()
+                        .message("Category Created Successfully!!")
+                        .build()
+        );
+    }
+
+    @DeleteMapping("/{id}/item-category/{categoryId}")
+    public ResponseEntity<?> deleteItemCategory(
+            @PathVariable("id") String businessId,
+            @PathVariable("categoryId") String categoryId
+    ) {
+        return itemCategoryService.deleteCategory(businessId, categoryId);
+    }
+
+    @PutMapping("/{id}/item-category/{categoryId}/item/")
+    public ResponseEntity<?> createMenuItem(
+            @PathVariable("id") String businessId,
+            @PathVariable("categoryId") String categoryId,
+            @RequestBody() DTO.MenuDTO itemDTO
+    ) {
+        return itemService.createOrUpdateItem(businessId, categoryId, itemDTO);
+    }
+
+    @GetMapping("/{id}/item-category/{categoryId}/item/")
+    public ResponseEntity<?> getMenuItems(
+            @PathVariable("id") String businessId,
+            @PathVariable("categoryId") String categoryId) {
+        return itemService.getItems(businessId, categoryId);
     }
 }
