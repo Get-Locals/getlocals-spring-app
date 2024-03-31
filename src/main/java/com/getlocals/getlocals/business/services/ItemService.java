@@ -34,20 +34,17 @@ public class ItemService {
 
     @Transactional
     public ResponseEntity<?> createOrUpdateItem(String businessId, String categoryId, DTO.MenuDTO itemDTO) {
-        Item item = null;
+        Item item = Item.builder()
+                        .price(itemDTO.getPrice())
+                        .name(itemDTO.getName())
+                        .currency("$")
+                        .ingredients(itemDTO.getIngredients())
+                        .description(itemDTO.getDescription())
+                        .category(itemCategoryRepository.getReferenceById(categoryId))
+                        .image(businessImageRepository.getReferenceById(itemDTO.getImageId()))
+                        .build();;
         if (itemDTO.getId() != null) {
-            item = itemRepository.getReferenceById(itemDTO.getId());
-            item.setImage(businessImageRepository.getReferenceById(itemDTO.getImageId()));
-        } else {
-            item = Item.builder()
-                    .price(itemDTO.getPrice())
-                    .name(itemDTO.getName())
-                    .currency("$")
-                    .ingredients(itemDTO.getIngredients())
-                    .description(itemDTO.getDescription())
-                    .category(itemCategoryRepository.getReferenceById(categoryId))
-                    .image(businessImageRepository.getReferenceById(itemDTO.getImageId()))
-                    .build();
+            item.setId(itemDTO.getId());
         }
         itemRepository.save(item);
 
