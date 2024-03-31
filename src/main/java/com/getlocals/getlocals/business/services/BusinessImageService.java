@@ -3,6 +3,7 @@ package com.getlocals.getlocals.business.services;
 import com.getlocals.getlocals.business.entities.BusinessImage;
 import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
+import com.getlocals.getlocals.business.repositories.ItemRepository;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class BusinessImageService {
 
     @Autowired
     private BusinessImageRepository businessImageRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
 
     public ResponseEntity<?> uploadImage(String id, MultipartFile file, CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
@@ -65,6 +69,10 @@ public class BusinessImageService {
     }
 
     public void deleteImage(String id) {
+        itemRepository.getItemByImage_Id(id).ifPresent(item -> {
+            item.setImage(null);
+            itemRepository.save(item);
+        });
         businessImageRepository.deleteById(id);
     }
 }

@@ -22,17 +22,12 @@ public class Item implements Serializable {
     private String ingredients;
     private String description;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     private BusinessImage image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private ItemCategory category;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "business_id")
-    @JsonIgnore
-    private Business business;
 
 }

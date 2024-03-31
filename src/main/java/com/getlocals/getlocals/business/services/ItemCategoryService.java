@@ -3,7 +3,9 @@ package com.getlocals.getlocals.business.services;
 import com.getlocals.getlocals.business.entities.ItemCategory;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.business.repositories.ItemCategoryRepository;
+import com.getlocals.getlocals.business.repositories.ItemRepository;
 import com.getlocals.getlocals.utils.DTO;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class ItemCategoryService {
 
     @Autowired
     private ItemCategoryRepository itemCategoryRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     public void createItemCategory(String name, String businessId) {
         var itemCategory = ItemCategory.builder()
@@ -38,7 +43,9 @@ public class ItemCategoryService {
                         .build()).collect(Collectors.toList()));
     }
 
+    @Transactional
     public ResponseEntity<?> deleteCategory(String businessId, String categoryId) {
+//        itemRepository.deleteAllByCategory_Id(categoryId);
         itemCategoryRepository.deleteById(categoryId);
         return ResponseEntity.ok(
                 DTO.StringMessage.builder()

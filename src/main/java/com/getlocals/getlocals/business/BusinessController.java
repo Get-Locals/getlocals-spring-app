@@ -123,7 +123,7 @@ public class BusinessController {
         );
     }
 
-    @DeleteMapping("/{id}/item-category/{categoryId}")
+    @DeleteMapping("/{id}/item-category/{categoryId}/")
     public ResponseEntity<?> deleteItemCategory(
             @PathVariable("id") String businessId,
             @PathVariable("categoryId") String categoryId
@@ -145,5 +145,10 @@ public class BusinessController {
             @PathVariable("id") String businessId,
             @PathVariable("categoryId") String categoryId) {
         return itemService.getItems(businessId, categoryId);
+    }
+
+    @DeleteMapping("/item/{id}/")
+    public ResponseEntity<?> deleteItem(@PathVariable("id") String itemId) {
+        return itemService.deleteItem(itemId);
     }
 }

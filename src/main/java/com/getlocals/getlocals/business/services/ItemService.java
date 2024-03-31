@@ -37,6 +37,7 @@ public class ItemService {
         Item item = null;
         if (itemDTO.getId() != null) {
             item = itemRepository.getReferenceById(itemDTO.getId());
+            item.setImage(businessImageRepository.getReferenceById(itemDTO.getImageId()));
         } else {
             item = Item.builder()
                     .price(itemDTO.getPrice())
@@ -45,7 +46,6 @@ public class ItemService {
                     .ingredients(itemDTO.getIngredients())
                     .description(itemDTO.getDescription())
                     .category(itemCategoryRepository.getReferenceById(categoryId))
-                    .business(businessRepository.getReferenceById(businessId))
                     .image(businessImageRepository.getReferenceById(itemDTO.getImageId()))
                     .build();
         }
@@ -56,25 +56,27 @@ public class ItemService {
     }
 
     public ResponseEntity<?> getItems(String businessId, String categoryId) {
-        List<Item> items = itemRepository.getAllByBusiness_IdAndCategory_Id(businessId, categoryId);
+        List<Item> items = itemRepository.getAllByCategory_Id(categoryId);
 
         var res = items.stream().map(item -> {
-            var image = businessImageRepository.getReferenceById(item.getImage().getId());
+            DTO.BusinessImageDTO imageDTO = null;
 
-
-            byte[] imageData = new byte[0];
-            try {
-                imageData = image.getImageData().getBytes(1, (int) image.getImageData().length());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (item.getImage() != null) {
+                var image = businessImageRepository.getReferenceById(item.getImage().getId());
+                byte[] imageData = new byte[0];
+                try {
+                    imageData = image.getImageData().getBytes(1, (int) image.getImageData().length());
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                String base64ImageData = Base64.getEncoder().encodeToString(imageData);
+                imageDTO = DTO.BusinessImageDTO.builder()
+                        .image(base64ImageData)
+                        .extension(image.getExtension())
+                        .id(image.getId())
+                        .name(image.getName())
+                        .build();
             }
-            String base64ImageData = Base64.getEncoder().encodeToString(imageData);
-            var imageDTO = DTO.BusinessImageDTO.builder()
-                    .image(base64ImageData)
-                    .extension(image.getExtension())
-                    .id(image.getId())
-                    .name(image.getName())
-                    .build();
 
             return DTO.MenuDTO.builder()
                     .id(item.getId())
@@ -87,5 +89,14 @@ public class ItemService {
                     .image(imageDTO).build();
         }).collect(Collectors.toList());
         return ResponseEntity.ok(res);
+    }
+
+    public ResponseEntity<?> deleteItem(String itemId) {
+        itemRepository.deleteById(itemId);
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder()
+                        .message("Successfully Deleted Item")
+                        .build()
+        );
     }
 }

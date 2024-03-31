@@ -83,20 +83,18 @@ public class BusinessService {
     @Transactional
     public String addMenuItems(DTO.AddItemBusinessDTO itemsDTO) {
         // Get the business the items are going to be assigned to.
-        Business business = businessRepository.getReferenceById(itemsDTO.getBusiness());
         List<Item> buildItems = new ArrayList<>();
         // Creating items from the DTO
         itemsDTO.getItems().forEach(item -> {
             Item buildItem = Item.builder()
                     .name(item.getName())
                     .currency(item.getCurrency())
-                    .business(business)
                     .price(item.getPrice()).build();
             buildItems.add(buildItem);
         });
 
         itemRepository.saveAll(buildItems);
-        return business.getId();
+        return "Added Item to the Menu";
     }
 
     public DTO.BusinessRegisterDTO getBusinessById(String businessId) {

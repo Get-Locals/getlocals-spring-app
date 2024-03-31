@@ -26,4 +26,7 @@ public class BusinessTimings implements Serializable {
     private String friday;
     private String saturday;
     private String sunday;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Business business;
 }
