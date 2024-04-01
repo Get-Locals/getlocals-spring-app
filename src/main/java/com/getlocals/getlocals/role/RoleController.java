@@ -1,5 +1,6 @@
 package com.getlocals.getlocals.role;
 
+import com.getlocals.getlocals.utils.CustomEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,10 @@ public class RoleController {
 
     @PostMapping("/all")
     public ResponseEntity<String> createAll() {
-        List<String> roles = new ArrayList<>(Arrays.asList(
-                "ADMIN", "USER", "MANAGER", "OWNER"
-        ));
-        for (String userRole : roles) {
+        CustomEnums.RolesEnum[] roles = CustomEnums.RolesEnum.values();
+        for (CustomEnums.RolesEnum userRole : roles) {
             Role role = new Role();
-            role.setRole(userRole);
+            role.setRole(userRole.getVal());
             roleRepository.save(role);
         }
         return new ResponseEntity<>("Created all the roles", HttpStatus.OK);

@@ -6,15 +6,16 @@ spring:
     username: root
     password: 8574
   jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
     hibernate:
       ddl-auto: update
 
 # Logging
 logging:
   level:
-    org.springframework.web: debug
-    org.springframework.security: trace
+    org.springframework:
+      security: INFO
+      web: DEBUG
+      boot: INFO
+    org.hibernate: ERROR
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+

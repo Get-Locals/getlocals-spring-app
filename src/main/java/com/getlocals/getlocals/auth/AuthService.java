@@ -6,9 +6,12 @@ import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
 import com.getlocals.getlocals.user.User;
 import com.getlocals.getlocals.user.UserRepository;
+import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,8 +43,11 @@ public class AuthService {
 
     private final Long DAY = (long) (1000*60*60*24);
 
-    public AuthenticationResponse register(DTO.UserRegisterDTO registerDTO) {
-        Role userRole = roleRepository.findByRole("USER");
+    public ResponseEntity<?> register(DTO.UserRegisterDTO registerDTO) {
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
+            return new ResponseEntity<>("User already exists with that email", HttpStatus.CONFLICT);
+        }
+        Role userRole = roleRepository.findByRole(CustomEnums.RolesEnum.USER.getVal());
         var user = User.builder()
                 .isActive(false)
                 .name(registerDTO.getName())
@@ -50,11 +56,11 @@ public class AuthService {
                 .roles(List.of(userRole))
                 .build();
         userRepository.save(user);
-        return getAuthToken(user);
+        return ResponseEntity.ok(getAuthToken(user));
 
     }
 
-    public AuthenticationResponse authenticate(DTO.UserAuthDTO authDTO) {
+    public ResponseEntity<?> authenticate(DTO.UserAuthDTO authDTO) {
 
         try {
             authenticationManager.authenticate(
@@ -64,10 +70,10 @@ public class AuthService {
                     )
             );
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
-        var user = userRepository.findByEmail(authDTO.getEmail());
-        return getAuthToken(user);
+        var user = userRepository.findByEmail(authDTO.getEmail()).get();
+        return ResponseEntity.ok(getAuthToken(user));
 
     }
 
@@ -75,16 +81,18 @@ public class AuthService {
     public AuthenticationResponse refreshToken(String refreshToken) {
         var email = jwtService.extractEmail(refreshToken);
         var user = userRepository.findByEmail(email);
-        return getAuthToken(user);
+        return getAuthToken(user.get());
     }
 
     private AuthenticationResponse getAuthToken(User user) {
         var extraClaims = new HashMap<String, Object>();
-        extraClaims.put("roles", user.getRolesString());
+        extraClaims.put("scope", user.getRolesString());
         extraClaims.put("name", user.getName());
         return AuthenticationResponse.builder()
-                .token(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY))
-                .refreshToken(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY * 2))
+                .access(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY))
+                .refresh(jwtService.generateToken(new UserPrincipal(user), extraClaims, DAY * 7))
+                .name(user.getName())
+                .username(user.getEmail())
                 .build();
     }
 
@@ -92,5 +100,9 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         return principal.getUsername();
+    }
+
+    public Boolean validate_token(String token) {
+        return jwtService.validateToken(token, getLoggedInUserEmail());
     }
 }
