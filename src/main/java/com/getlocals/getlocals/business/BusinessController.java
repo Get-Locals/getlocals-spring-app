@@ -1,13 +1,12 @@
 package com.getlocals.getlocals.business;
 
 import com.getlocals.getlocals.auth.AuthenticationResponse;
-import com.getlocals.getlocals.business.services.BusinessImageService;
-import com.getlocals.getlocals.business.services.BusinessService;
-import com.getlocals.getlocals.business.services.ItemCategoryService;
-import com.getlocals.getlocals.business.services.ItemService;
+import com.getlocals.getlocals.business.services.*;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +32,9 @@ public class BusinessController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private BusinessReviewService businessReviewService;
 
     @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> registerBusiness(
@@ -150,5 +152,12 @@ public class BusinessController {
     @DeleteMapping("/item/{id}/")
     public ResponseEntity<?> deleteItem(@PathVariable("id") String itemId) {
         return itemService.deleteItem(itemId);
+    }
+
+    @GetMapping("/{id}/reviews/")
+    public ResponseEntity<?> getBusinessReviews(
+            @PathVariable("id") String businessId,
+            @PageableDefault() Pageable pageable ) {
+        return businessReviewService.getBusinessReviews(businessId, pageable);
     }
 }

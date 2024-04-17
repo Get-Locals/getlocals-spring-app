@@ -161,4 +161,16 @@ public class DTO {
         private String description;
         private BusinessImageDTO image;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessReviewDTO {
+        private String id;
+        private Float rating;
+        private String comment;
+        private String email;
+        private String fullName;
+    }
 }
