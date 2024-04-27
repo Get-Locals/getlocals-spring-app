@@ -63,7 +63,6 @@ public class BusinessService {
         // Create the business
         Business business = Business.builder()
                 .serviceType(CustomEnums.BusinessServicesEnum.valueOf(businessRegisterDTO.getBusinessType()))
-//                .logo(businessRegisterDTO.getLogo())
                 .name(businessRegisterDTO.getName())
                 .location(businessRegisterDTO.getLocation())
                 .owner(owner)

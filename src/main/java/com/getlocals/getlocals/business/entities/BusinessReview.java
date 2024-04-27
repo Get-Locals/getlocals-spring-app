@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 
 @Data
@@ -29,4 +31,10 @@ public class BusinessReview implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Business business;
+
+    @CreatedDate
+    private Date createdAt;
+
+    @OneToOne
+    private BusinessImage image;
 }

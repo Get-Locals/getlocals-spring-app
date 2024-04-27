@@ -172,5 +172,6 @@ public class DTO {
         private String comment;
         private String email;
         private String fullName;
+        private String imageId;
     }
 }

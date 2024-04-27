@@ -41,6 +41,13 @@ public class BusinessReviewService {
     public ResponseEntity<?> getBusinessReviews(String businessId, Pageable pageable) {
         var businessReviews = businessReviewRepository.findAllByBusiness_Id(businessId, pageable);
 
-        return ResponseEntity.ok(businessReviews);
+        return ResponseEntity.ok(businessReviews.stream().map(review -> DTO.BusinessReviewDTO.builder()
+                .id(review.getId())
+                .fullName(review.getFullName())
+                .email(review.getFullName())
+                .comment(review.getComment())
+                .rating(review.getRating())
+                .imageId(review.getImage().getId())
+                .build()));
     }
 }

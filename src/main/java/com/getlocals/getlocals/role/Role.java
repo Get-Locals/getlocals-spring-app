@@ -18,6 +18,8 @@ public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
     private String role;
 
     @ManyToMany(mappedBy = "roles")

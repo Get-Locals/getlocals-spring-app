@@ -6,6 +6,7 @@ import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -49,13 +50,13 @@ public class BusinessController {
     }
 
     @PostMapping("/items/")
-    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<String> createMenuItems(@RequestBody DTO.AddItemBusinessDTO items) {
         return ResponseEntity.ok(businessService.addMenuItems(items));
     }
 
     @GetMapping("/{id}/")
-    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<DTO.BusinessRegisterDTO> getBusiness(@PathVariable("id") String businessId) {
         return ResponseEntity.ok(businessService.getBusinessById(businessId));
     }
@@ -66,18 +67,21 @@ public class BusinessController {
     }
 
     @PostMapping("/types/")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> createItems(@RequestParam(required = false) String item) {
         businessService.createTypes(item);
         return ResponseEntity.ok("Created");
     }
 
     @PutMapping("/about-us/{businessId}/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> updateAboutUsBusiness(@RequestParam String aboutUs,
                                                    @PathVariable("businessId") String id) {
         return businessService.updateBusiness(aboutUs, id);
     }
 
     @PostMapping(value = "/{id}/upload/{type}/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> uploadImage(
             @PathVariable("id") String id,
             @RequestPart("file") MultipartFile file,
@@ -94,7 +98,16 @@ public class BusinessController {
         return businessImageService.getImages(id, type);
     }
 
+    @GetMapping("/free/{id}/image/{imageId}")
+    public ResponseEntity<?> getImage(
+            @PathVariable("id") String businessId,
+            @PathVariable("imageId") String imageId
+    ) throws RuntimeException {
+        return businessImageService.getImage(businessId, imageId);
+    }
+
     @DeleteMapping("/image/{id}/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER')")
     public ResponseEntity<?> deleteImage(@PathVariable("id") String id) {
         businessImageService.deleteImage(id);
         return ResponseEntity.ok(DTO.StringMessage
@@ -111,6 +124,7 @@ public class BusinessController {
     }
 
     @PostMapping("/{id}/item-category/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> createItemCategory(
             @RequestParam("name") String name,
             @PathVariable("id") String businessId
@@ -126,6 +140,7 @@ public class BusinessController {
     }
 
     @DeleteMapping("/{id}/item-category/{categoryId}/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> deleteItemCategory(
             @PathVariable("id") String businessId,
             @PathVariable("categoryId") String categoryId
@@ -134,6 +149,7 @@ public class BusinessController {
     }
 
     @PutMapping("/{id}/item-category/{categoryId}/item/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> createMenuItem(
             @PathVariable("id") String businessId,
             @PathVariable("categoryId") String categoryId,
@@ -150,14 +166,23 @@ public class BusinessController {
     }
 
     @DeleteMapping("/item/{id}/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> deleteItem(@PathVariable("id") String itemId) {
         return itemService.deleteItem(itemId);
     }
 
     @GetMapping("/{id}/reviews/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> getBusinessReviews(
             @PathVariable("id") String businessId,
-            @PageableDefault() Pageable pageable ) {
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable ) {
         return businessReviewService.getBusinessReviews(businessId, pageable);
+    }
+
+    @PostMapping("/{id}/review/")
+    public ResponseEntity<?> createBusinessReview(
+            @PathVariable("id") String businessID,
+            @RequestBody()DTO.BusinessReviewDTO reviewDTO) {
+        return businessReviewService.createBusinessReview(reviewDTO, businessID);
     }
 }

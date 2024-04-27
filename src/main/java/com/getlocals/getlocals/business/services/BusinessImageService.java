@@ -1,5 +1,6 @@
 package com.getlocals.getlocals.business.services;
 
+import com.getlocals.getlocals.business.entities.Business;
 import com.getlocals.getlocals.business.entities.BusinessImage;
 import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
@@ -7,6 +8,8 @@ import com.getlocals.getlocals.business.repositories.ItemRepository;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,21 +53,7 @@ public class BusinessImageService {
     public ResponseEntity<?> getImages(String id, CustomEnums.BusinessImageTypeEnum type) {
         List<BusinessImage> images = businessImageRepository.getBusinessImagesByBusiness_IdAndType(id, type);
         List<DTO.BusinessImageDTO> res = images.stream()
-                .map(image -> {
-                    try {
-                        byte[] imageData = image.getImageData().getBytes(1, (int) image.getImageData().length());
-                        String base64ImageData = Base64.getEncoder().encodeToString(imageData);
-
-                        return DTO.BusinessImageDTO.builder()
-                                .id(image.getId())
-                                .name(image.getName())
-                                .image(base64ImageData)
-                                .extension(image.getExtension())
-                                .type(image.getType()).build();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+                .map(this::getImageData)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(res);
     }
@@ -74,5 +64,39 @@ public class BusinessImageService {
             itemRepository.save(item);
         });
         businessImageRepository.deleteById(id);
+    }
+
+    public ResponseEntity<?> getImage(String businessId, String imageId) throws RuntimeException {
+
+        BusinessImage image = businessImageRepository.getBusinessImageByBusiness_IdAndId(businessId, imageId).orElse(null);
+
+        if (image != null) {
+            try {
+                // Return the image data as byte array
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(image.getImageData().getBytes(1, (int) image.getImageData().length()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public DTO.BusinessImageDTO getImageData(BusinessImage image) {
+        try {
+            byte[] imageData = image.getImageData().getBytes(1, (int) image.getImageData().length());
+            String base64ImageData = Base64.getEncoder().encodeToString(imageData);
+
+            return DTO.BusinessImageDTO.builder()
+                    .id(image.getId())
+                    .name(image.getName())
+                    .image(base64ImageData)
+                    .extension(image.getExtension())
+                    .type(image.getType()).build();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
