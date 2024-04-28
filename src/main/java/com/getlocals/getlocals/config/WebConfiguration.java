@@ -55,11 +55,12 @@ public class WebConfiguration {
                             "/user/register",
                             "/role/all",
                             "/api/auth/**",
-                            "/api/business/types/"
+                            "/api/business/types/",
+                            "/api/business/free/**"
                     ).permitAll();
                     request.requestMatchers("/error").permitAll();
                     request.requestMatchers("/api/**").authenticated();
-                    request.requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "OWNER", "MANAGER");
+                    request.requestMatchers("/admin/**").hasAnyAuthority("ADMIN");
                 })
                 .sessionManagement((manager) -> {
                     manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
