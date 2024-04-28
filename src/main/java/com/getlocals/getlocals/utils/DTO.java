@@ -173,5 +173,7 @@ public class DTO {
         private String email;
         private String fullName;
         private String imageId;
+        private Long phone;
+        private String date;
     }
 }

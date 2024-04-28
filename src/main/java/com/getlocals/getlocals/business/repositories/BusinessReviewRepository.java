@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BusinessReviewRepository extends JpaRepository<BusinessReview, String> {
 
-    Page<BusinessReview> findAllByBusiness_Id(String businessId, Pageable pageable);
+    Page<BusinessReview> findAllByBusiness_IdOrderByCreatedAtDesc(String businessId, Pageable pageable);
 }

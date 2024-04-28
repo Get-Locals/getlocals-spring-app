@@ -25,6 +25,7 @@ public class BusinessReviewService {
                 .comment(reviewDTO.getComment())
                 .fullName(reviewDTO.getFullName())
                 .rating(reviewDTO.getRating())
+                .phone(reviewDTO.getPhone())
                 .business(businessRepository.getReferenceById(businessId))
                 .build();
         try {
@@ -39,15 +40,17 @@ public class BusinessReviewService {
 
     }
     public ResponseEntity<?> getBusinessReviews(String businessId, Pageable pageable) {
-        var businessReviews = businessReviewRepository.findAllByBusiness_Id(businessId, pageable);
+        var businessReviews = businessReviewRepository.findAllByBusiness_IdOrderByCreatedAtDesc(businessId, pageable);
 
         return ResponseEntity.ok(businessReviews.stream().map(review -> DTO.BusinessReviewDTO.builder()
                 .id(review.getId())
                 .fullName(review.getFullName())
-                .email(review.getFullName())
+                .email(review.getEmail())
                 .comment(review.getComment())
                 .rating(review.getRating())
                 .imageId(review.getImage().getId())
+                .phone(review.getPhone())
+                .date(review.getCreatedAt().toString())
                 .build()));
     }
 }

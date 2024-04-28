@@ -29,6 +29,8 @@ public class BusinessReview implements Serializable {
 
     private String fullName;
 
+    private Long phone;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Business business;
 
