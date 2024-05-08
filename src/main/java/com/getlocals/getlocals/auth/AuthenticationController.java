@@ -18,7 +18,7 @@ public class AuthenticationController {
     public ResponseEntity<?> registerUser(
             @RequestBody DTO.UserRegisterDTO registerDTO
             ) {
-        return authService.register(registerDTO);
+        return authService.register(registerDTO, false);
     }
 
     @PostMapping("/authenticate/")

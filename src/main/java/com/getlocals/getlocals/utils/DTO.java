@@ -176,4 +176,18 @@ public class DTO {
         private Long phone;
         private String date;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessTimingDTO {
+        private String monday;
+        private String tuesday;
+        private String wednesday;
+        private String thursday;
+        private String friday;
+        private String saturday;
+        private String sunday;
+    }
 }

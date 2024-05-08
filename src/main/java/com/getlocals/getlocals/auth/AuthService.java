@@ -43,11 +43,16 @@ public class AuthService {
 
     private final Long DAY = (long) (1000*60*60*24);
 
-    public ResponseEntity<?> register(DTO.UserRegisterDTO registerDTO) {
+    public ResponseEntity<?> register(DTO.UserRegisterDTO registerDTO, Boolean isAdmin) {
         if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
             return new ResponseEntity<>("User already exists with that email", HttpStatus.CONFLICT);
         }
-        Role userRole = roleRepository.findByRole(CustomEnums.RolesEnum.USER.getVal());
+        Role userRole;
+        if (isAdmin) {
+            userRole = roleRepository.findByRole(CustomEnums.RolesEnum.ADMIN.getVal()).orElseThrow();
+        } else {
+            userRole = roleRepository.findByRole(CustomEnums.RolesEnum.USER.getVal()).orElseThrow();
+        }
         var user = User.builder()
                 .isActive(false)
                 .name(registerDTO.getName())

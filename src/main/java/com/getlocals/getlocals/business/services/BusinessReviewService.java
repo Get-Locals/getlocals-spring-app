@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @Service
 public class BusinessReviewService {
 
@@ -42,6 +45,8 @@ public class BusinessReviewService {
     public ResponseEntity<?> getBusinessReviews(String businessId, Pageable pageable) {
         var businessReviews = businessReviewRepository.findAllByBusiness_IdOrderByCreatedAtDesc(businessId, pageable);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd' 'MMMM', 'yyyy", Locale.ENGLISH);
+
         return ResponseEntity.ok(businessReviews.stream().map(review -> DTO.BusinessReviewDTO.builder()
                 .id(review.getId())
                 .fullName(review.getFullName())
@@ -50,7 +55,7 @@ public class BusinessReviewService {
                 .rating(review.getRating())
                 .imageId(review.getImage().getId())
                 .phone(review.getPhone())
-                .date(review.getCreatedAt().toString())
+                .date(dateFormat.format(review.getCreatedAt()))
                 .build()));
     }
 }

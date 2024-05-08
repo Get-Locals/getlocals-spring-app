@@ -37,6 +37,9 @@ public class BusinessController {
     @Autowired
     private BusinessReviewService businessReviewService;
 
+    @Autowired
+    private BusinessTimingService businessTimingService;
+
     @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> registerBusiness(
             @RequestBody DTO.BusinessRegisterDTO businessRegisterDTO,
@@ -98,7 +101,7 @@ public class BusinessController {
         return businessImageService.getImages(id, type);
     }
 
-    @GetMapping("/free/{id}/image/{imageId}")
+    @GetMapping("/free/{id}/image/{imageId}/")
     public ResponseEntity<?> getImage(
             @PathVariable("id") String businessId,
             @PathVariable("imageId") String imageId
@@ -184,5 +187,21 @@ public class BusinessController {
             @PathVariable("id") String businessID,
             @RequestBody()DTO.BusinessReviewDTO reviewDTO) {
         return businessReviewService.createBusinessReview(reviewDTO, businessID);
+    }
+
+    @PutMapping("/{id}/timing/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<?> updateBusinessTimings(
+            @PathVariable("id") String businessId,
+            @RequestBody DTO.BusinessTimingDTO timingDTO
+            ) {
+        return businessTimingService.updateTimings(businessId, timingDTO);
+    }
+
+    @GetMapping("/{id}/timings/")
+    public ResponseEntity<?> getBusinessTimings(
+            @PathVariable("id") String businessId
+    ) {
+        return businessTimingService.getBusinessTimings(businessId);
     }
 }
