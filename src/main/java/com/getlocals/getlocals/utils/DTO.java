@@ -189,5 +189,6 @@ public class DTO {
         private String friday;
         private String saturday;
         private String sunday;
+        private String today;
     }
 }
