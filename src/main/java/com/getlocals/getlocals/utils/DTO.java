@@ -2,7 +2,6 @@ package com.getlocals.getlocals.utils;
 
 import lombok.*;
 
-import java.sql.Blob;
 import java.util.Collection;
 import java.util.List;
 
@@ -129,6 +128,14 @@ public class DTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class StringValue {
+        private String value;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class BusinessImageDTO {
         private String id;
         private String name;
@@ -175,5 +182,20 @@ public class DTO {
         private String imageId;
         private Long phone;
         private String date;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessTimingDTO {
+        private String monday;
+        private String tuesday;
+        private String wednesday;
+        private String thursday;
+        private String friday;
+        private String saturday;
+        private String sunday;
+        private String today;
     }
 }

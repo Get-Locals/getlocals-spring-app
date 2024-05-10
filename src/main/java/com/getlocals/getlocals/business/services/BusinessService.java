@@ -3,12 +3,10 @@ package com.getlocals.getlocals.business.services;
 import com.getlocals.getlocals.auth.AuthService;
 import com.getlocals.getlocals.auth.AuthenticationResponse;
 import com.getlocals.getlocals.business.entities.Business;
+import com.getlocals.getlocals.business.entities.BusinessTimings;
 import com.getlocals.getlocals.business.entities.BusinessType;
 import com.getlocals.getlocals.business.entities.Item;
-import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
-import com.getlocals.getlocals.business.repositories.BusinessRepository;
-import com.getlocals.getlocals.business.repositories.BusinessTypeRepository;
-import com.getlocals.getlocals.business.repositories.ItemRepository;
+import com.getlocals.getlocals.business.repositories.*;
 import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
 import com.getlocals.getlocals.user.User;
@@ -52,7 +50,7 @@ public class BusinessService {
     private BusinessTypeRepository businessTypeRepository;
 
     @Autowired
-    private BusinessImageRepository businessImageRepository;
+    private BusinessTimingRepo businessTimingRepo;
 
 
     @Transactional
@@ -67,13 +65,27 @@ public class BusinessService {
                 .location(businessRegisterDTO.getLocation())
                 .owner(owner)
                 .build();
-        businessRepository.save(business);
+        business = businessRepository.save(business);
 
         // Assign user the owner role
         Collection<Role> roles = owner.getRoles();
-        roles.add(roleRepository.findByRole(CustomEnums.RolesEnum.OWNER.getVal()));
+        roles.add(roleRepository.findByRole(CustomEnums.RolesEnum.OWNER.getVal()).orElseThrow());
         owner.setRoles(roles);
         userRepository.save(owner);
+
+        // Create default business timings.
+        BusinessTimings timings = BusinessTimings.builder()
+                .business(business)
+                .today("OPEN")
+                .tomorrow("OPEN")
+                .monday("10:00 AM - 10:00 PM")
+                .tuesday("10:00 AM - 10:00 PM")
+                .wednesday("10:00 AM - 10:00 PM")
+                .thursday("10:00 AM - 10:00 PM")
+                .friday("10:00 AM - 10:00 PM")
+                .saturday("10:00 AM - 10:00 PM")
+                .sunday("10:00 AM - 10:00 PM").build();
+        businessTimingRepo.save(timings);
 
         return authService.refreshToken(jwtToken);
 
@@ -81,7 +93,6 @@ public class BusinessService {
 
     @Transactional
     public String addMenuItems(DTO.AddItemBusinessDTO itemsDTO) {
-        // Get the business the items are going to be assigned to.
         List<Item> buildItems = new ArrayList<>();
         // Creating items from the DTO
         itemsDTO.getItems().forEach(item -> {
