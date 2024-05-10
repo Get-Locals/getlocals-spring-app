@@ -2,7 +2,6 @@ package com.getlocals.getlocals.utils;
 
 import lombok.*;
 
-import java.sql.Blob;
 import java.util.Collection;
 import java.util.List;
 
@@ -123,6 +122,14 @@ public class DTO {
     @NoArgsConstructor
     public static class StringMessage {
         private String message;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class StringValue {
+        private String value;
     }
 
     @Getter

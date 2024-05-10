@@ -37,7 +37,7 @@ public class BusinessTimingService {
     }
 
     public ResponseEntity<?> getBusinessTimings(String businessId) {
-        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).get();
+        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
         return ResponseEntity.ok(DTO.BusinessTimingDTO.builder()
                 .monday(timings.getMonday())
                 .tuesday(timings.getTuesday())
@@ -47,5 +47,29 @@ public class BusinessTimingService {
                 .saturday(timings.getSaturday())
                 .sunday(timings.getSunday())
                 .build());
+    }
+
+    public ResponseEntity<?> getBusinessOperatingStatus(String businessId, Boolean tomorrow, Boolean today) {
+        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
+
+        if (tomorrow) {
+            return ResponseEntity.ok(DTO.StringValue.builder().value(timings.getTomorrow()).build());
+        } else if (today) {
+            return ResponseEntity.ok(DTO.StringValue.builder().value(timings.getToday()).build());
+        } else {
+            return ResponseEntity.badRequest().body("Bad Request... Please contact admin.");
+        }
+    }
+
+    public ResponseEntity<?> updateBusinessOperatingStatus(String businessId, String status) {
+        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
+
+        timings.setTomorrow(status.toUpperCase());
+        businessTimingRepo.save(timings);
+
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder()
+                        .message("Updated Business Operation Settings Successfully")
+                        .build());
     }
 }

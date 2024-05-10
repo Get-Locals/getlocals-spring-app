@@ -131,7 +131,7 @@ public class BusinessController {
     public ResponseEntity<?> createItemCategory(
             @RequestParam("name") String name,
             @PathVariable("id") String businessId
-            ) {
+    ) {
 
         itemCategoryService.createItemCategory(name, businessId);
 
@@ -178,14 +178,14 @@ public class BusinessController {
     @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> getBusinessReviews(
             @PathVariable("id") String businessId,
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable ) {
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return businessReviewService.getBusinessReviews(businessId, pageable);
     }
 
     @PostMapping("/{id}/review/")
     public ResponseEntity<?> createBusinessReview(
             @PathVariable("id") String businessID,
-            @RequestBody()DTO.BusinessReviewDTO reviewDTO) {
+            @RequestBody() DTO.BusinessReviewDTO reviewDTO) {
         return businessReviewService.createBusinessReview(reviewDTO, businessID);
     }
 
@@ -194,7 +194,7 @@ public class BusinessController {
     public ResponseEntity<?> updateBusinessTimings(
             @PathVariable("id") String businessId,
             @RequestBody DTO.BusinessTimingDTO timingDTO
-            ) {
+    ) {
         return businessTimingService.updateTimings(businessId, timingDTO);
     }
 
@@ -203,5 +203,22 @@ public class BusinessController {
             @PathVariable("id") String businessId
     ) {
         return businessTimingService.getBusinessTimings(businessId);
+    }
+
+    @GetMapping("/{id}/business-operation-status/")
+    public ResponseEntity<?> getBusinessOperatingStatus(
+            @PathVariable("id") String businessId,
+            @RequestParam(value = "tomorrow", defaultValue = "false") Boolean tomorrow,
+            @RequestParam(value = "today", defaultValue = "false") Boolean today
+    ) {
+        return businessTimingService.getBusinessOperatingStatus(businessId, tomorrow, today);
+    }
+
+    @PutMapping("/{id}/business-operation-status/")
+    public ResponseEntity<?> updateBusinessOperatingStatus(
+            @PathVariable("id") String businessId,
+            @RequestParam(value = "status") String status
+    ) {
+        return businessTimingService.updateBusinessOperatingStatus(businessId, status);
     }
 }
