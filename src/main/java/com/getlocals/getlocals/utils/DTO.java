@@ -198,4 +198,17 @@ public class DTO {
         private String sunday;
         private String today;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContactRequestDTO {
+        private String id;
+        private String fullName;
+        private String email;
+        private String message;
+        private String subject;
+        private String imageId;
+    }
 }

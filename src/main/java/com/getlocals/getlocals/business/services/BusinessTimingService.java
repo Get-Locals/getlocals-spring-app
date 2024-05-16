@@ -1,6 +1,6 @@
 package com.getlocals.getlocals.business.services;
 
-import com.getlocals.getlocals.business.entities.BusinessTimings;
+import com.getlocals.getlocals.business.entities.BusinessTiming;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.business.repositories.BusinessTimingRepo;
 import com.getlocals.getlocals.utils.DTO;
@@ -19,7 +19,7 @@ public class BusinessTimingService {
 
 
     public ResponseEntity<?> updateTimings(String businessId, DTO.BusinessTimingDTO timingDTO) {
-        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElse(new BusinessTimings());
+        BusinessTiming timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElse(new BusinessTiming());
         timings.setMonday(timingDTO.getMonday());
         timings.setTuesday(timingDTO.getTuesday());
         timings.setWednesday(timingDTO.getWednesday());
@@ -37,7 +37,7 @@ public class BusinessTimingService {
     }
 
     public ResponseEntity<?> getBusinessTimings(String businessId) {
-        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
+        BusinessTiming timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
         return ResponseEntity.ok(DTO.BusinessTimingDTO.builder()
                 .monday(timings.getMonday())
                 .tuesday(timings.getTuesday())
@@ -50,7 +50,7 @@ public class BusinessTimingService {
     }
 
     public ResponseEntity<?> getBusinessOperatingStatus(String businessId, Boolean tomorrow, Boolean today) {
-        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
+        BusinessTiming timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
 
         if (tomorrow) {
             return ResponseEntity.ok(DTO.StringValue.builder().value(timings.getTomorrow()).build());
@@ -62,7 +62,7 @@ public class BusinessTimingService {
     }
 
     public ResponseEntity<?> updateBusinessOperatingStatus(String businessId, String status) {
-        BusinessTimings timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
+        BusinessTiming timings = businessTimingRepo.getBusinessTimingsByBusiness_Id(businessId).orElseThrow();
 
         timings.setTomorrow(status.toUpperCase());
         businessTimingRepo.save(timings);

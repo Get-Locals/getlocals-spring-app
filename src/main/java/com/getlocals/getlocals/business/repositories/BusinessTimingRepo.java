@@ -1,11 +1,11 @@
 package com.getlocals.getlocals.business.repositories;
 
-import com.getlocals.getlocals.business.entities.BusinessTimings;
+import com.getlocals.getlocals.business.entities.BusinessTiming;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface BusinessTimingRepo extends JpaRepository<BusinessTimings, String> {
+public interface BusinessTimingRepo extends JpaRepository<BusinessTiming, String> {
 
-    Optional<BusinessTimings> getBusinessTimingsByBusiness_Id(String id);
+    Optional<BusinessTiming> getBusinessTimingsByBusiness_Id(String id);
 }

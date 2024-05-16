@@ -57,8 +57,7 @@ public class WebConfiguration {
                             "/user/register",
                             "/role/all",
                             "/api/auth/**",
-                            "/api/business/types/",
-                            "/api/business/free/**"
+                            "/api/business/public/**"
                     ).permitAll();
                     request.requestMatchers("/error").permitAll();
                     request.requestMatchers("/api/**").authenticated();

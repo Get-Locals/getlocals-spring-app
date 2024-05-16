@@ -1,6 +1,6 @@
 package com.getlocals.getlocals.utils;
 
-import com.getlocals.getlocals.business.entities.BusinessTimings;
+import com.getlocals.getlocals.business.entities.BusinessTiming;
 import com.getlocals.getlocals.business.repositories.BusinessTimingRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class Schedulers {
         Optional<DayOfWeek> dayOfWeekOptional = Optional.ofNullable(LocalDate.now().plusDays(1).getDayOfWeek());
         String tomorrow = dayOfWeekOptional.map(DayOfWeek::toString).map(String::toLowerCase).orElseThrow();
 
-        List<BusinessTimings> allTimings = businessTimingRepo.findAll();
+        List<BusinessTiming> allTimings = businessTimingRepo.findAll();
         allTimings.forEach(timings -> {
             timings.setToday(timings.getTomorrow());
             String tomorrowStatus = switch (tomorrow) {
