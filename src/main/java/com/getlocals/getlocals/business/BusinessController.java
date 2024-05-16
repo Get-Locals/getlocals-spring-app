@@ -64,7 +64,7 @@ public class BusinessController {
         return ResponseEntity.ok(businessService.getBusinessById(businessId));
     }
 
-    @GetMapping("/types/")
+    @GetMapping("/public/types/")
     public ResponseEntity<List<DTO.BusinessTypeDTO>> getItems() {
         return ResponseEntity.ok(businessService.getTypes());
     }
@@ -94,14 +94,14 @@ public class BusinessController {
         return businessImageService.uploadImage(id, file, type);
     }
 
-    @GetMapping("/{id}/images/{type}/")
+    @GetMapping("/public/{id}/images/{type}/")
     public ResponseEntity<?> getBusinessImages(
             @PathVariable("id") String id,
             @PathVariable("type") CustomEnums.BusinessImageTypeEnum type) {
         return businessImageService.getImages(id, type);
     }
 
-    @GetMapping("/free/{id}/image/{imageId}/")
+    @GetMapping("/public/{id}/image/{imageId}/")
     public ResponseEntity<?> getImage(
             @PathVariable("id") String businessId,
             @PathVariable("imageId") String imageId
@@ -119,7 +119,7 @@ public class BusinessController {
                 .build());
     }
 
-    @GetMapping("/{id}/item-category/")
+    @GetMapping("/public/{id}/item-category/")
     public ResponseEntity<?> getBusinessItemCategories(
             @PathVariable("id") String businessId
     ) {
@@ -161,7 +161,7 @@ public class BusinessController {
         return itemService.createOrUpdateItem(businessId, categoryId, itemDTO);
     }
 
-    @GetMapping("/{id}/item-category/{categoryId}/item/")
+    @GetMapping("/public/{id}/item-category/{categoryId}/item/")
     public ResponseEntity<?> getMenuItems(
             @PathVariable("id") String businessId,
             @PathVariable("categoryId") String categoryId) {
@@ -182,7 +182,7 @@ public class BusinessController {
         return businessReviewService.getBusinessReviews(businessId, pageable);
     }
 
-    @PostMapping("/{id}/review/")
+    @PostMapping("/public/{id}/review/")
     public ResponseEntity<?> createBusinessReview(
             @PathVariable("id") String businessID,
             @RequestBody() DTO.BusinessReviewDTO reviewDTO) {
@@ -198,14 +198,14 @@ public class BusinessController {
         return businessTimingService.updateTimings(businessId, timingDTO);
     }
 
-    @GetMapping("/{id}/timings/")
+    @GetMapping("/public/{id}/timings/")
     public ResponseEntity<?> getBusinessTimings(
             @PathVariable("id") String businessId
     ) {
         return businessTimingService.getBusinessTimings(businessId);
     }
 
-    @GetMapping("/{id}/business-operation-status/")
+    @GetMapping("/public/{id}/business-operation-status/")
     public ResponseEntity<?> getBusinessOperatingStatus(
             @PathVariable("id") String businessId,
             @RequestParam(value = "tomorrow", defaultValue = "false") Boolean tomorrow,
@@ -215,10 +215,27 @@ public class BusinessController {
     }
 
     @PutMapping("/{id}/business-operation-status/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<?> updateBusinessOperatingStatus(
             @PathVariable("id") String businessId,
             @RequestParam(value = "status") String status
     ) {
         return businessTimingService.updateBusinessOperatingStatus(businessId, status);
+    }
+
+    @GetMapping("/{id}/contact-requests/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<?> getAllContactRequests(
+            @PathVariable("id") String businessId
+    ) {
+        return businessService.getAllContactRequests(businessId);
+    }
+
+    @PostMapping("/public/{id}/contact-requests/")
+    public ResponseEntity<?> createContactRequest(
+            @PathVariable("id") String businessId,
+            @RequestBody DTO.ContactRequestDTO requestDTO
+    ) {
+        return businessService.createContactRequest(businessId, requestDTO);
     }
 }

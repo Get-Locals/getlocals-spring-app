@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BusinessTimings implements Serializable {
+public class BusinessTiming implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

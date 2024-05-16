@@ -2,10 +2,7 @@ package com.getlocals.getlocals.business.services;
 
 import com.getlocals.getlocals.auth.AuthService;
 import com.getlocals.getlocals.auth.AuthenticationResponse;
-import com.getlocals.getlocals.business.entities.Business;
-import com.getlocals.getlocals.business.entities.BusinessTimings;
-import com.getlocals.getlocals.business.entities.BusinessType;
-import com.getlocals.getlocals.business.entities.Item;
+import com.getlocals.getlocals.business.entities.*;
 import com.getlocals.getlocals.business.repositories.*;
 import com.getlocals.getlocals.role.Role;
 import com.getlocals.getlocals.role.RoleRepository;
@@ -52,6 +49,12 @@ public class BusinessService {
     @Autowired
     private BusinessTimingRepo businessTimingRepo;
 
+    @Autowired
+    private ContactRequestRepository contactRequestRepository;
+
+    @Autowired
+    private BusinessImageRepository imageRepository;
+
 
     @Transactional
     public AuthenticationResponse registerBusiness(DTO.BusinessRegisterDTO businessRegisterDTO, String jwtToken) {
@@ -74,7 +77,7 @@ public class BusinessService {
         userRepository.save(owner);
 
         // Create default business timings.
-        BusinessTimings timings = BusinessTimings.builder()
+        BusinessTiming timings = BusinessTiming.builder()
                 .business(business)
                 .today("OPEN")
                 .tomorrow("OPEN")
@@ -160,5 +163,33 @@ public class BusinessService {
         businessRepository.save(business);
         return new ResponseEntity<>(DTO.StringMessage.builder()
                 .message("Updated Successfully").build(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getAllContactRequests(String businessId) {
+        List<ContactRequest> requests = contactRequestRepository.getAllByBusiness_Id(businessId);
+        return ResponseEntity.ok(
+                requests.stream().map(request -> DTO.ContactRequestDTO.builder()
+                        .id(request.getId())
+                        .fullName(request.getFullName())
+                        .email(request.getEmail())
+                        .subject(request.getSubject())
+                        .message(request.getMessage())
+                        .imageId(request.getImage().getId())
+                        .build()));
+    }
+
+    public ResponseEntity<?> createContactRequest(String businessId, DTO.ContactRequestDTO requestDTO) {
+        ContactRequest request = ContactRequest.builder()
+                .business(businessRepository.getReferenceById(businessId))
+                .fullName(requestDTO.getFullName())
+                .email(requestDTO.getEmail())
+                .message(requestDTO.getMessage())
+                .subject(requestDTO.getSubject())
+                .image(Optional.of(imageRepository.getReferenceById(requestDTO.getImageId())).orElse(null))
+                .build();
+        contactRequestRepository.save(request);
+        return ResponseEntity.ok(DTO.StringMessage.builder()
+                .message("Submitted request successfully!")
+                .build());
     }
 }
