@@ -1,9 +1,6 @@
 package com.getlocals.getlocals.business.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,4 +18,7 @@ public class ContactInformation implements Serializable {
     private String email;
     private String phone1;
     private String phone2;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Business business;
 }

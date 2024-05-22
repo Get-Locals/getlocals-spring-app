@@ -7,7 +7,7 @@ spring:
     password: 8574
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 # Logging
 logging:

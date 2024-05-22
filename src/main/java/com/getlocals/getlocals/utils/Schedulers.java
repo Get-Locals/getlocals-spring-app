@@ -44,10 +44,10 @@ public class Schedulers {
                 }
             };
 
-            if ("CLOSED".equalsIgnoreCase(tomorrowStatus)) {
-                timings.setTomorrow("CLOSED");
+            if (CustomEnums.BusinessTimingEnum.CLOSE.getVal().equalsIgnoreCase(tomorrowStatus)) {
+                timings.setTomorrow(CustomEnums.BusinessTimingEnum.CLOSE.getVal());
             } else {
-                timings.setTomorrow("OPEN");
+                timings.setTomorrow(CustomEnums.BusinessTimingEnum.OPEN.getVal());
             }
         });
 

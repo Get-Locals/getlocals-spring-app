@@ -7,17 +7,6 @@ public class CustomEnums {
 
     @Getter
     @AllArgsConstructor
-    public enum BusinessServicesEnum {
-        FOOD("FOOD"),
-        PERSONAL_CARE("PERSONAL_CARE"),
-        OTHER("OTHER");
-
-        private final String val;
-
-    }
-
-    @Getter
-    @AllArgsConstructor
     public enum RolesEnum {
         OWNER("OWNER"),
         USER("USER"),
@@ -42,7 +31,8 @@ public class CustomEnums {
         CAROUSEL("CAROUSEL"),
         MENU("MENU"),
         LOGO("LOGO"),
-        TEAM("TEAM");
+        TEAM("TEAM"),
+        OWNER("OWNER");
 
         private final String val;
     }
@@ -54,6 +44,16 @@ public class CustomEnums {
         BUSINESS_TIMINGS("BUSINESS_TIMINGS"),
         URLS("URLS"),
         LOCATION("LOCATION");
+
+        private final String val;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum BusinessEmployeeTypeEnum {
+        OWNER("OWNER"),
+        MANAGER("MANAGER"),
+        EMPLOYEE("EMPLOYEE");
 
         private final String val;
     }

@@ -63,7 +63,7 @@ public class BusinessService {
 
         // Create the business
         Business business = Business.builder()
-                .serviceType(CustomEnums.BusinessServicesEnum.valueOf(businessRegisterDTO.getBusinessType()))
+                .serviceType(businessTypeRepository.getBusinessTypeByVal(businessRegisterDTO.getBusinessType()).orElseThrow())
                 .name(businessRegisterDTO.getName())
                 .location(businessRegisterDTO.getLocation())
                 .owner(owner)
@@ -79,8 +79,8 @@ public class BusinessService {
         // Create default business timings.
         BusinessTiming timings = BusinessTiming.builder()
                 .business(business)
-                .today("OPEN")
-                .tomorrow("OPEN")
+                .today(CustomEnums.BusinessTimingEnum.OPEN.getVal())
+                .tomorrow(CustomEnums.BusinessTimingEnum.OPEN.getVal())
                 .monday("10:00 AM - 10:00 PM")
                 .tuesday("10:00 AM - 10:00 PM")
                 .wednesday("10:00 AM - 10:00 PM")
@@ -89,6 +89,10 @@ public class BusinessService {
                 .saturday("10:00 AM - 10:00 PM")
                 .sunday("10:00 AM - 10:00 PM").build();
         businessTimingRepo.save(timings);
+
+
+        // Create Owner's profile
+
 
         return authService.refreshToken(jwtToken);
 
