@@ -31,7 +31,7 @@ public class Business implements Serializable {
     @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private User manager;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private BusinessType serviceType;
 
     private String aboutUs;

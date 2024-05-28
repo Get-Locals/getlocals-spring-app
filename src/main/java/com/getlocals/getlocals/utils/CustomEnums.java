@@ -31,7 +31,7 @@ public class CustomEnums {
         CAROUSEL("CAROUSEL"),
         MENU("MENU"),
         LOGO("LOGO"),
-        TEAM("TEAM"),
+        EMPLOYEE("EMPLOYEE"),
         OWNER("OWNER");
 
         private final String val;
@@ -52,6 +52,8 @@ public class CustomEnums {
     @AllArgsConstructor
     public enum BusinessEmployeeTypeEnum {
         OWNER("OWNER"),
+        GENERAL_MANAGER("GENERAL_MANAGER"),
+        DISTRICT_MANAGER("DISTRICT_MANAGER"),
         MANAGER("MANAGER"),
         EMPLOYEE("EMPLOYEE");
 

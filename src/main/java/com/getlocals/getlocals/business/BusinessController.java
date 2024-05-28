@@ -40,6 +40,9 @@ public class BusinessController {
     @Autowired
     private BusinessTimingService businessTimingService;
 
+    @Autowired
+    private EmployeeInfoService employeeInfoService;
+
     @PostMapping("/register/")
     public ResponseEntity<AuthenticationResponse> registerBusiness(
             @RequestBody DTO.BusinessRegisterDTO businessRegisterDTO,
@@ -237,5 +240,39 @@ public class BusinessController {
             @RequestBody DTO.ContactRequestDTO requestDTO
     ) {
         return businessService.createContactRequest(businessId, requestDTO);
+    }
+
+    @PostMapping("/{id}/employee-info/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<?> createEmployeeInfo(
+            @PathVariable("id") String businessId,
+            @RequestBody DTO.EmployeeInfoDTO employeeInfoDTO
+    ) {
+        return employeeInfoService.createEmployeeInfo(businessId, employeeInfoDTO);
+    }
+
+    @PutMapping("/{id}/employee-info/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<?> updateEmployeeInfo(
+            @PathVariable("id") String businessId,
+            @RequestBody DTO.EmployeeInfoDTO employeeInfoDTO
+    ) {
+        return employeeInfoService.updateEmployeeInfo(businessId, employeeInfoDTO);
+    }
+
+    @GetMapping("/public/{id}/employee-info/")
+    public ResponseEntity<?> GetEmployees(
+            @PathVariable("id") String businessId
+    ) {
+        return employeeInfoService.getEmployees(businessId);
+    }
+
+    @DeleteMapping("/{id}/employee-info/")
+    @PreAuthorize("hasAnyAuthority('OWNER', 'MANAGER', 'ADMIN')")
+    public ResponseEntity<?> deleteEmployee(
+            @PathVariable("id") String businessId,
+            @RequestParam("employeeId") String employeeId
+    ) {
+        return employeeInfoService.deleteEmployee(businessId, employeeId);
     }
 }

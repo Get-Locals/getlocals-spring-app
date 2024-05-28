@@ -27,7 +27,7 @@ public class BusinessImage implements Serializable {
     @Enumerated(EnumType.STRING)
     private CustomEnums.BusinessImageTypeEnum type;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Business business;
 
     @Lob

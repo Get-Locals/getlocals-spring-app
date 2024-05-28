@@ -29,4 +29,7 @@ public class EmployeeInfo {
 
     @OneToOne(cascade = CascadeType.ALL)
     private BusinessImage businessImage;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private Business business;
 }

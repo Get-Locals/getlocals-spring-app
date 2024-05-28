@@ -28,6 +28,6 @@ public class ContactRequest {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private BusinessImage image;
 
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Business business;
 }
