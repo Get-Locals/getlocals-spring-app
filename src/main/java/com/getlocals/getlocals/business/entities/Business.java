@@ -31,9 +31,10 @@ public class Business implements Serializable {
     @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private User manager;
 
-    @Enumerated(value = EnumType.STRING)
-    private CustomEnums.BusinessServicesEnum serviceType;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private BusinessType serviceType;
 
+    @Column(columnDefinition = "TEXT")
     private String aboutUs;
 
     private String uberUrl;

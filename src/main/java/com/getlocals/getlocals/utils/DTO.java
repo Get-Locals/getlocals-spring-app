@@ -211,4 +211,19 @@ public class DTO {
         private String subject;
         private String imageId;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EmployeeInfoDTO {
+        private String id;
+        private String firstName;
+        private String lastName;
+        private String description;
+        private String email;
+        private Long phoneNo;
+        private CustomEnums.BusinessEmployeeTypeEnum position;
+        private String imageId;
+    }
 }

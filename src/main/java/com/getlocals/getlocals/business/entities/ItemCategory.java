@@ -23,7 +23,7 @@ public class ItemCategory implements Serializable {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "business_id")
     private Business business;
 

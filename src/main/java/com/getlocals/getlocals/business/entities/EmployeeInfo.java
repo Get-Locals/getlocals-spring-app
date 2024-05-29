@@ -1,32 +1,34 @@
 package com.getlocals.getlocals.business.entities;
 
+import com.getlocals.getlocals.utils.CustomEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContactRequest {
+public class EmployeeInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
+    private String description;
     private String email;
+    private Long phoneNo;
 
-    @Column(columnDefinition = "TEXT")
-    private String message;
-    private String subject;
+    @Enumerated(EnumType.STRING)
+    private CustomEnums.BusinessEmployeeTypeEnum position;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    private BusinessImage image;
+    private BusinessImage businessImage;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Business business;

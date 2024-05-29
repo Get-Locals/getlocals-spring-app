@@ -25,7 +25,7 @@ public class Item implements Serializable {
     @OneToOne(orphanRemoval = true)
     private BusinessImage image;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private ItemCategory category;

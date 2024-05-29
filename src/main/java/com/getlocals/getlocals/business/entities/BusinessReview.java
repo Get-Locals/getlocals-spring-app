@@ -31,7 +31,7 @@ public class BusinessReview implements Serializable {
 
     private Long phone;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY, optional = false)
     private Business business;
 
     @CreatedDate
