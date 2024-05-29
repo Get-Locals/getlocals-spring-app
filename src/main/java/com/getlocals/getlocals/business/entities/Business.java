@@ -34,6 +34,7 @@ public class Business implements Serializable {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private BusinessType serviceType;
 
+    @Column(columnDefinition = "TEXT")
     private String aboutUs;
 
     private String uberUrl;

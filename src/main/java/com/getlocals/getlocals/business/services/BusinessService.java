@@ -55,6 +55,9 @@ public class BusinessService {
     @Autowired
     private BusinessImageRepository imageRepository;
 
+    @Autowired
+    private EmployeeInfoRepository employeeInfoRepository;
+
 
     @Transactional
     public AuthenticationResponse registerBusiness(DTO.BusinessRegisterDTO businessRegisterDTO, String jwtToken) {
@@ -92,7 +95,14 @@ public class BusinessService {
 
 
         // Create Owner's profile
-
+        EmployeeInfo employeeInfo = EmployeeInfo.builder()
+                .firstName(owner.getName().split(" ")[0])
+                .lastName(Optional.of(owner.getName().split(" ")[1]).orElse(null))
+                .business(business)
+                .email(owner.getEmail())
+                .position(CustomEnums.BusinessEmployeeTypeEnum.OWNER)
+                .build();
+        employeeInfoRepository.save(employeeInfo);
 
         return authService.refreshToken(jwtToken);
 
