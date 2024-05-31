@@ -275,4 +275,12 @@ public class BusinessController {
     ) {
         return employeeInfoService.deleteEmployee(businessId, employeeId);
     }
+
+
+    @GetMapping("/public/{businessUsername}/template-information/")
+    public ResponseEntity<?> getTemplateInformation(
+            @PathVariable("businessUsername") String businessUsername
+    ) {
+        return businessService.getTemplateInformation(businessUsername);
+    }
 }

@@ -226,4 +226,14 @@ public class DTO {
         private CustomEnums.BusinessEmployeeTypeEnum position;
         private String imageId;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessTemplateInfoDTO {
+        private String id;
+        private String templateId;
+
+    }
 }

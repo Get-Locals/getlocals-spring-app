@@ -58,6 +58,9 @@ public class BusinessService {
     @Autowired
     private EmployeeInfoRepository employeeInfoRepository;
 
+    @Autowired
+    private BusinessTemplateRepo templateRepo;
+
 
     @Transactional
     public AuthenticationResponse registerBusiness(DTO.BusinessRegisterDTO businessRegisterDTO, String jwtToken) {
@@ -103,6 +106,14 @@ public class BusinessService {
                 .position(CustomEnums.BusinessEmployeeTypeEnum.OWNER)
                 .build();
         employeeInfoRepository.save(employeeInfo);
+
+        // Set the default template
+        BusinessTemplate template = BusinessTemplate.builder()
+                .business(business)
+                .templateId("067b7d1e-eb92-42e9-9ba0-1021933f6b83")
+                .build();
+        templateRepo.save(template);
+
 
         return authService.refreshToken(jwtToken);
 
@@ -205,5 +216,15 @@ public class BusinessService {
         return ResponseEntity.ok(DTO.StringMessage.builder()
                 .message("Submitted request successfully!")
                 .build());
+    }
+
+    public ResponseEntity<?> getTemplateInformation(String businessUsername) {
+        BusinessTemplate template = templateRepo.getBusinessTemplateByBusiness_BusinessUsername(businessUsername).orElseThrow();
+
+        return ResponseEntity.ok(
+                DTO.BusinessTemplateInfoDTO.builder()
+                        .id(template.getBusiness().getId())
+                        .templateId(template.getTemplateId())
+                        .build());
     }
 }
