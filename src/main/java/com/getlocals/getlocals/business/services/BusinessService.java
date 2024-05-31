@@ -137,11 +137,13 @@ public class BusinessService {
 
     public DTO.BusinessRegisterDTO getBusinessById(String businessId) {
         Business business = businessRepository.getReferenceById(businessId);
+        BusinessImage logo = imageRepository.getBusinessImageByBusiness_IdAndType(businessId, CustomEnums.BusinessImageTypeEnum.LOGO).orElse(null);
         return DTO.BusinessRegisterDTO.builder()
                 .businessType(business.getServiceType().getVal())
                 .name(business.getName())
                 .location(business.getLocation())
                 .aboutUs(business.getAboutUs())
+                .logo(logo != null ? logo.getId() : null)
                 .build();
     }
 

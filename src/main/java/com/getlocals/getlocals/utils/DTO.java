@@ -47,7 +47,7 @@ public class DTO {
         private String name;
         private String location;
         private String currency;
-        private byte[] logo;
+        private String logo;
         private String businessType;
         private String aboutUs;
 
