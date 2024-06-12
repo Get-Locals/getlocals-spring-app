@@ -97,6 +97,13 @@ public class BusinessController {
         return businessImageService.uploadImage(id, file, type);
     }
 
+    @GetMapping("/public/{id}/logo/")
+    public ResponseEntity<?> getBusinessLogo(
+            @PathVariable("id") String id
+    ) {
+        return businessImageService.getLogo(id);
+    }
+
     @GetMapping("/public/{id}/images/{type}/")
     public ResponseEntity<?> getBusinessImages(
             @PathVariable("id") String id,
@@ -282,5 +289,20 @@ public class BusinessController {
             @PathVariable("businessUsername") String businessUsername
     ) {
         return businessService.getTemplateInformation(businessUsername);
+    }
+
+    @GetMapping("/public/{businessId}/contact/")
+    public ResponseEntity<?> getBusinessContactInformation(
+            @PathVariable("businessId") String businessId
+    ) {
+        return businessService.getBusinessContactInformation(businessId);
+    }
+
+    @PutMapping("/{businessId}/contact/")
+    public ResponseEntity<?> updateBusinessContactInformation(
+            @PathVariable("businessId") String businessId,
+            @RequestBody DTO.BusinessContactInformation contactInformation
+    ) {
+        return businessService.createOrUpdateBusinessContactInformation(businessId, contactInformation);
     }
 }

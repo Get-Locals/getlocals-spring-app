@@ -61,6 +61,9 @@ public class BusinessService {
     @Autowired
     private BusinessTemplateRepo templateRepo;
 
+    @Autowired
+    private ContactInformationRepository contactInformationRepository;
+
 
     @Transactional
     public AuthenticationResponse registerBusiness(DTO.BusinessRegisterDTO businessRegisterDTO, String jwtToken) {
@@ -113,6 +116,11 @@ public class BusinessService {
                 .templateId("067b7d1e-eb92-42e9-9ba0-1021933f6b83")
                 .build();
         templateRepo.save(template);
+
+        ContactInformation information = ContactInformation.builder()
+                .business(business)
+                .build();
+        contactInformationRepository.save(information);
 
 
         return authService.refreshToken(jwtToken);
@@ -227,6 +235,43 @@ public class BusinessService {
                 DTO.BusinessTemplateInfoDTO.builder()
                         .id(template.getBusiness().getId())
                         .templateId(template.getTemplateId())
+                        .build());
+    }
+
+    public ResponseEntity<?> getBusinessContactInformation(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+
+        ContactInformation information = contactInformationRepository.getContactInformationByBusiness_Id(businessId).orElse(null);
+        if (information == null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.ok(DTO.BusinessContactInformation.builder()
+                        .address(business.getLocation())
+                        .phone1(information.getPhone1())
+                        .phone2(information.getPhone2())
+                        .email(information.getEmail())
+                        .facebookUrl(information.getFacebookUrl())
+                        .instagramUrl(information.getInstagramUrl())
+                        .youtubeUrl(information.getYoutubeUrl())
+                        .build());
+    }
+
+    public ResponseEntity<?> createOrUpdateBusinessContactInformation(String businessId, DTO.BusinessContactInformation contactInformation) {
+        ContactInformation information = contactInformationRepository.getContactInformationByBusiness_Id(businessId).orElse(new ContactInformation());
+        information.setEmail(contactInformation.getEmail());
+        information.setPhone1(contactInformation.getPhone1());
+        information.setPhone2(contactInformation.getPhone2());
+        information.setInstagramUrl(contactInformation.getInstagramUrl());
+        information.setFacebookUrl(contactInformation.getFacebookUrl());
+        information.setYoutubeUrl(contactInformation.getYoutubeUrl());
+        if (information.getBusiness() == null) {
+            information.setBusiness(businessRepository.getReferenceById(businessId));
+        }
+
+        contactInformationRepository.save(information);
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder()
+                        .message("Successfully Updated Contact Information")
                         .build());
     }
 }

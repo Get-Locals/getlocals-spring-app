@@ -236,4 +236,18 @@ public class DTO {
         private String templateId;
 
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessContactInformation{
+        private String email;
+        private String phone1;
+        private String phone2;
+        private String address;
+        private String instagramUrl;
+        private String facebookUrl;
+        private String youtubeUrl;
+    }
 }

@@ -69,19 +69,7 @@ public class BusinessImageService {
     public ResponseEntity<?> getImage(String businessId, String imageId) throws RuntimeException {
 
         BusinessImage image = businessImageRepository.getBusinessImageByBusiness_IdAndId(businessId, imageId).orElse(null);
-
-        if (image != null) {
-            try {
-                // Return the image data as byte array
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(image.getImageData().getBytes(1, (int) image.getImageData().length()));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return getImageByteResponse(image);
     }
 
     public DTO.BusinessImageDTO getImageData(BusinessImage image) {
@@ -97,6 +85,27 @@ public class BusinessImageService {
                     .type(image.getType()).build();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public ResponseEntity<?> getLogo(String id) {
+
+        BusinessImage image = businessImageRepository.getBusinessImageByBusiness_IdAndType(id, CustomEnums.BusinessImageTypeEnum.LOGO).orElse(null);
+        return getImageByteResponse(image);
+    }
+
+    private ResponseEntity<?> getImageByteResponse(BusinessImage image) {
+        if (image != null) {
+            try {
+                // Return the image data as byte array
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(image.getImageData().getBytes(1, (int) image.getImageData().length()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }
