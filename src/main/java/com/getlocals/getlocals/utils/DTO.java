@@ -250,4 +250,14 @@ public class DTO {
         private String facebookUrl;
         private String youtubeUrl;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PublicBusinessInformation{
+        private String name;
+        private String aboutUs;
+        private String ownerImageId;
+    }
 }

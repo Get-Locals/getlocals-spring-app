@@ -274,4 +274,15 @@ public class BusinessService {
                         .message("Successfully Updated Contact Information")
                         .build());
     }
+
+    public ResponseEntity<?> getPublicBusinessInfo(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+        List<EmployeeInfo> owners = employeeInfoRepository.findAllByBusiness_IdAndPosition(businessId, CustomEnums.BusinessEmployeeTypeEnum.OWNER);
+        return ResponseEntity.ok(
+                DTO.PublicBusinessInformation.builder()
+                        .aboutUs(business.getAboutUs())
+                        .name(business.getName())
+                        .ownerImageId(!owners.isEmpty() ? owners.get(0).getBusinessImage().getId() : null)
+                        .build());
+    }
 }

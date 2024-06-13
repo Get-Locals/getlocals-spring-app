@@ -67,6 +67,11 @@ public class BusinessController {
         return ResponseEntity.ok(businessService.getBusinessById(businessId));
     }
 
+    @GetMapping("/public/{id}/")
+    public ResponseEntity<?> getPublicBusinessInfo(@PathVariable("id") String businessId) {
+        return businessService.getPublicBusinessInfo(businessId);
+    }
+
     @GetMapping("/public/types/")
     public ResponseEntity<List<DTO.BusinessTypeDTO>> getItems() {
         return ResponseEntity.ok(businessService.getTypes());

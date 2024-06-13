@@ -89,6 +89,7 @@ public class WebConfiguration {
         //config.setAllowCredentials(true); // you USUALLY want this
         config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedOrigin("http://127.0.0.1:3000");
+        config.addAllowedOrigin("http://10.0.0.35:3000");
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
         config.addAllowedMethod(HttpMethod.OPTIONS);
