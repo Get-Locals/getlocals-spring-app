@@ -16,4 +16,7 @@ public interface EmployeeInfoRepository extends JpaRepository<EmployeeInfo, Stri
     List<EmployeeInfo> findAllByBusiness_IdAndPosition(String businessId, CustomEnums.BusinessEmployeeTypeEnum position);
 
     void deleteByBusiness_IdAndId(String businessId, String id);
+
+    Optional<EmployeeInfo> getEmployeeInfoByBusinessImage_Id(String imageId);
+
 }

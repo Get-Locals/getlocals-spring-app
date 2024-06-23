@@ -22,14 +22,11 @@ public class BusinessReview implements Serializable {
     private String id;
 
     private Float rating;
-
     private String comment;
-
     private String email;
-
     private String fullName;
-
     private Long phone;
+    private String employeeName;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY, optional = false)
     private Business business;

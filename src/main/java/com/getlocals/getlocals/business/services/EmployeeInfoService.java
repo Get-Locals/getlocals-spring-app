@@ -26,6 +26,9 @@ public class EmployeeInfoService {
     @Autowired
     private BusinessRepository businessRepository;
 
+    @Autowired
+    private BusinessImageService businessImageService;
+
 
     public ResponseEntity<?> createEmployeeInfo(String businessId, DTO.EmployeeInfoDTO employeeInfoDTO) {
         BusinessImage image = null;
@@ -73,15 +76,19 @@ public class EmployeeInfoService {
 
     public ResponseEntity<?> getEmployees(String businessId) {
         List<EmployeeInfo> employees = employeeInfoRepository.findAllByBusiness_Id(businessId);
-        var result = employees.stream().map(employee -> DTO.EmployeeInfoDTO.builder()
-                .id(employee.getId())
-                .lastName(employee.getLastName())
-                .firstName(employee.getFirstName())
-                .imageId(Optional.ofNullable(employee.getBusinessImage()).map(BusinessImage::getId).orElse(null))
-                .position(employee.getPosition())
-                .email(employee.getEmail())
-                .phoneNo(employee.getPhoneNo())
-                .description(employee.getDescription()).build()
+        var result = employees.stream().map(employee -> {
+            BusinessImage image = Optional.of(employee.getBusinessImage()).orElse(null);
+            return DTO.EmployeeInfoDTO.builder()
+                    .id(employee.getId())
+                    .lastName(employee.getLastName())
+                    .firstName(employee.getFirstName())
+                    .imageId(image.getId())
+                    .imageDTO(businessImageService.getImageData(image))
+                    .position(employee.getPosition())
+                    .email(employee.getEmail())
+                    .phoneNo(employee.getPhoneNo())
+                    .description(employee.getDescription()).build();
+        }
         ).toList();
         return ResponseEntity.ok(result);
     }

@@ -20,4 +20,5 @@ logging:
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
 # Server Setup
 server:
-  address: 10.0.0.35
+  address: 10.0.0.253
+  port: 8080

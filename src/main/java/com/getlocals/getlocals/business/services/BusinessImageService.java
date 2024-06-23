@@ -1,14 +1,13 @@
 package com.getlocals.getlocals.business.services;
 
-import com.getlocals.getlocals.business.entities.Business;
 import com.getlocals.getlocals.business.entities.BusinessImage;
 import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
+import com.getlocals.getlocals.business.repositories.EmployeeInfoRepository;
 import com.getlocals.getlocals.business.repositories.ItemRepository;
 import com.getlocals.getlocals.utils.CustomEnums;
 import com.getlocals.getlocals.utils.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +31,9 @@ public class BusinessImageService {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private EmployeeInfoRepository employeeInfoRepository;
 
 
     public ResponseEntity<?> uploadImage(String id, MultipartFile file, CustomEnums.BusinessImageTypeEnum type) throws IOException, SQLException {
@@ -63,6 +64,10 @@ public class BusinessImageService {
             item.setImage(null);
             itemRepository.save(item);
         });
+        employeeInfoRepository.getEmployeeInfoByBusinessImage_Id(id).ifPresent(employeeInfo -> {
+            employeeInfo.setBusinessImage(null);
+            employeeInfoRepository.save(employeeInfo);
+        });
         businessImageRepository.deleteById(id);
     }
 
@@ -73,6 +78,9 @@ public class BusinessImageService {
     }
 
     public DTO.BusinessImageDTO getImageData(BusinessImage image) {
+        if (image == null) {
+            return null;
+        }
         try {
             byte[] imageData = image.getImageData().getBytes(1, (int) image.getImageData().length());
             String base64ImageData = Base64.getEncoder().encodeToString(imageData);
@@ -90,8 +98,9 @@ public class BusinessImageService {
 
     public ResponseEntity<?> getLogo(String id) {
 
-        BusinessImage image = businessImageRepository.getBusinessImageByBusiness_IdAndType(id, CustomEnums.BusinessImageTypeEnum.LOGO).orElse(null);
-        return getImageByteResponse(image);
+        BusinessImage image = businessImageRepository.
+                getBusinessImageByBusiness_IdAndType(id, CustomEnums.BusinessImageTypeEnum.LOGO).orElseThrow();
+        return ResponseEntity.ok(getImageData(image));
     }
 
     private ResponseEntity<?> getImageByteResponse(BusinessImage image) {
