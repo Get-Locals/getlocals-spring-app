@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -16,6 +17,7 @@ import java.sql.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class BusinessReview implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,6 +34,7 @@ public class BusinessReview implements Serializable {
     private Business business;
 
     @CreatedDate
+    @Temporal(TemporalType.DATE)
     private Date createdAt;
 
     @OneToOne

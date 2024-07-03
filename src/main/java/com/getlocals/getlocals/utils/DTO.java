@@ -262,4 +262,13 @@ public class DTO {
         private String aboutUs;
         private String ownerImageId;
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FooterContentDTO {
+        private BusinessContactInformation contactInfo;
+        private BusinessTimingDTO timings;
+    }
 }

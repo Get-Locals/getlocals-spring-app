@@ -44,6 +44,12 @@ public class Business implements Serializable {
     @Column(unique = true)
     private String businessUsername;
 
+    @OneToOne
+    private BusinessTiming timing;
+
+    @OneToOne
+    private ContactInformation contactInformation;
+
 
     public String getOwnerName() {
         return this.owner.getName();

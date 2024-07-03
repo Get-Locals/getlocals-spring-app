@@ -11,14 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootApplication
+
 @Slf4j
+@SpringBootApplication
 public class GetLocalsApplication {
 
     public static void main(String[] args) {

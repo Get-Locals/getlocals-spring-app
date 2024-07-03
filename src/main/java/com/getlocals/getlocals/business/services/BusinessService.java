@@ -285,4 +285,32 @@ public class BusinessService {
                         .ownerImageId(!owners.isEmpty() ? owners.get(0).getBusinessImage().getId() : null)
                         .build());
     }
+
+    public ResponseEntity<?> getFooterContent(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+        BusinessTiming timings = business.getTiming();
+        ContactInformation information = business.getContactInformation();
+        return ResponseEntity.ok(
+                DTO.FooterContentDTO.builder()
+                        .contactInfo(DTO.BusinessContactInformation.builder()
+                                .address(business.getLocation())
+                                .phone1(information.getPhone1())
+                                .phone2(information.getPhone2())
+                                .email(information.getEmail())
+                                .facebookUrl(information.getFacebookUrl())
+                                .instagramUrl(information.getInstagramUrl())
+                                .youtubeUrl(information.getYoutubeUrl())
+                                .build())
+                        .timings(DTO.BusinessTimingDTO.builder()
+                                .monday(timings.getMonday())
+                                .tuesday(timings.getTuesday())
+                                .wednesday(timings.getWednesday())
+                                .thursday(timings.getThursday())
+                                .friday(timings.getFriday())
+                                .saturday(timings.getSaturday())
+                                .sunday(timings.getSunday())
+                                .build())
+                        .build()
+        );
+    }
 }

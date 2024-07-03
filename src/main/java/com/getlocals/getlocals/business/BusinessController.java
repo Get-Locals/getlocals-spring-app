@@ -310,4 +310,11 @@ public class BusinessController {
     ) {
         return businessService.createOrUpdateBusinessContactInformation(businessId, contactInformation);
     }
+
+    @GetMapping("/public/{businessId}/footer/")
+    public ResponseEntity<?> getFooterContent(
+            @PathVariable("businessId") String businessId
+    ) {
+        return businessService.getFooterContent(businessId);
+    }
 }
