@@ -28,6 +28,6 @@ logging:
   file:
       name: logs/app.log
 # Server Setup
-#server:
-#  address: 10.0.0.253
-#  port: 8080
+server:
+  address: 10.0.0.253
+  port: 8080
