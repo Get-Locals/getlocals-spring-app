@@ -77,13 +77,13 @@ public class EmployeeInfoService {
     public ResponseEntity<?> getEmployees(String businessId) {
         List<EmployeeInfo> employees = employeeInfoRepository.findAllByBusiness_Id(businessId);
         var result = employees.stream().map(employee -> {
-            BusinessImage image = Optional.of(employee.getBusinessImage()).orElse(null);
+            BusinessImage image = employee.getBusinessImage();
             return DTO.EmployeeInfoDTO.builder()
                     .id(employee.getId())
                     .lastName(employee.getLastName())
                     .firstName(employee.getFirstName())
-                    .imageId(image.getId())
-                    .imageDTO(businessImageService.getImageData(image))
+                    .imageId(image != null ? image.getId() : null)
+                    .imageDTO(image != null ? businessImageService.getImageData(image) : null)
                     .position(employee.getPosition())
                     .email(employee.getEmail())
                     .phoneNo(employee.getPhoneNo())

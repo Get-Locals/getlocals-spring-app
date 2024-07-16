@@ -24,7 +24,8 @@ public class CustomErrorHandler {
     @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> handleInternalServerError(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        ex.printStackTrace();
+        return new ResponseEntity<>("An error occurred while processing your request. If this issue persists, please contact admin.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 }

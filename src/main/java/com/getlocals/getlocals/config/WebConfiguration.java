@@ -94,7 +94,8 @@ public class WebConfiguration {
                 if (origin != null && (origin.equals("http://localhost:3000") ||
                         origin.equals("http://127.0.0.1:3000") ||
                         origin.equals("http://172.20.10.2:3000") ||
-                        Pattern.matches("http://10\\.0\\.0\\.[0-9]+:3000", origin))) {
+                        origin.equals("http://10.70.113.96:3000") ||
+                        Pattern.matches("http://10\\.[0-9]\\.[0-9]\\.[0-9]+:3000", origin))) {
                     CorsConfiguration config = new CorsConfiguration();
                     config.addAllowedOrigin(origin);
                     config.setAllowCredentials(true);
