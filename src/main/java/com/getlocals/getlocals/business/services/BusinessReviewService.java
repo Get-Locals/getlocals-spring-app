@@ -1,6 +1,8 @@
 package com.getlocals.getlocals.business.services;
 
+import com.getlocals.getlocals.business.entities.BusinessImage;
 import com.getlocals.getlocals.business.entities.BusinessReview;
+import com.getlocals.getlocals.business.repositories.BusinessImageRepository;
 import com.getlocals.getlocals.business.repositories.BusinessRepository;
 import com.getlocals.getlocals.business.repositories.BusinessReviewRepository;
 import com.getlocals.getlocals.utils.DTO;
@@ -21,15 +23,24 @@ public class BusinessReviewService {
     @Autowired
     private BusinessRepository businessRepository;
 
+    @Autowired
+    private BusinessImageRepository imageRepository;
+
 
     public ResponseEntity<?> createBusinessReview(DTO.BusinessReviewDTO reviewDTO, String businessId) {
+        BusinessImage image = null;
+        if (reviewDTO.getImageId() != null) {
+            image = imageRepository.getReferenceById(reviewDTO.getImageId());
+        }
         var review = BusinessReview.builder()
                 .email(reviewDTO.getEmail())
                 .comment(reviewDTO.getComment())
                 .fullName(reviewDTO.getFullName())
                 .rating(reviewDTO.getRating())
                 .phone(reviewDTO.getPhone())
+                .employeeName(reviewDTO.getEmployeeName())
                 .business(businessRepository.getReferenceById(businessId))
+                .image(image)
                 .build();
         try {
             businessReviewRepository.save(review);
@@ -53,7 +64,7 @@ public class BusinessReviewService {
                 .email(review.getEmail())
                 .comment(review.getComment())
                 .rating(review.getRating())
-                .imageId(review.getImage().getId())
+                .imageId(review.getImage() != null ? review.getImage().getId() : null)
                 .phone(review.getPhone())
                 .date(dateFormat.format(review.getCreatedAt()))
                 .build()));

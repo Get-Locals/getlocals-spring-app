@@ -12,4 +12,6 @@ public interface BusinessImageRepository extends JpaRepository<BusinessImage, St
     List<BusinessImage> getBusinessImagesByBusiness_IdAndType(String id, CustomEnums.BusinessImageTypeEnum type);
 
     Optional<BusinessImage> getBusinessImageByBusiness_IdAndId(String businessId, String id);
+
+    Optional<BusinessImage> getBusinessImageByBusiness_IdAndType(String businessId, CustomEnums.BusinessImageTypeEnum type);
 }

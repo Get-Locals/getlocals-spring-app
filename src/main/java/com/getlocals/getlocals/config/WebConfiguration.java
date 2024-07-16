@@ -1,6 +1,7 @@
 package com.getlocals.getlocals.config;
 
 import com.getlocals.getlocals.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+
+import java.util.regex.Pattern;
 
 @Configuration
 @EnableWebSecurity
@@ -68,7 +71,6 @@ public class WebConfiguration {
                 })
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        ;
         return http.build();
     }
 
@@ -82,23 +84,33 @@ public class WebConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        //config.setAllowCredentials(true); // you USUALLY want this
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedOrigin("http://127.0.0.1:3000");
-        config.setAllowCredentials(true);
-        config.addAllowedHeader("*");
-        config.addAllowedMethod(HttpMethod.OPTIONS);
-        config.addAllowedMethod(HttpMethod.HEAD);
-        config.addAllowedMethod(HttpMethod.GET);
-        config.addAllowedMethod(HttpMethod.PUT);
-        config.addAllowedMethod(HttpMethod.POST);
-        config.addAllowedMethod(HttpMethod.DELETE);
-        config.addAllowedMethod(HttpMethod.PATCH);
-        source.registerCorsConfiguration("/**", config);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                String origin = request.getHeader("Origin");
+                if (origin != null && (origin.equals("http://localhost:3000") ||
+                        origin.equals("http://127.0.0.1:3000") ||
+                        origin.equals("http://172.20.10.2:3000") ||
+                        Pattern.matches("http://10\\.0\\.0\\.[0-9]+:3000", origin))) {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.addAllowedOrigin(origin);
+                    config.setAllowCredentials(true);
+                    config.addAllowedHeader("*");
+                    config.addAllowedMethod(HttpMethod.OPTIONS);
+                    config.addAllowedMethod(HttpMethod.HEAD);
+                    config.addAllowedMethod(HttpMethod.GET);
+                    config.addAllowedMethod(HttpMethod.PUT);
+                    config.addAllowedMethod(HttpMethod.POST);
+                    config.addAllowedMethod(HttpMethod.DELETE);
+                    config.addAllowedMethod(HttpMethod.PATCH);
+                    return config;
+                }
+                return null;
+            }
+        };
         return new CorsFilter(source);
     }
 

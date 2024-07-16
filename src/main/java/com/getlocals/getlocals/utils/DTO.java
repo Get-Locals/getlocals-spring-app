@@ -47,7 +47,7 @@ public class DTO {
         private String name;
         private String location;
         private String currency;
-        private byte[] logo;
+        private String logo;
         private String businessType;
         private String aboutUs;
 
@@ -179,6 +179,7 @@ public class DTO {
         private String comment;
         private String email;
         private String fullName;
+        private String employeeName;
         private String imageId;
         private Long phone;
         private String date;
@@ -225,5 +226,49 @@ public class DTO {
         private Long phoneNo;
         private CustomEnums.BusinessEmployeeTypeEnum position;
         private String imageId;
+        private BusinessImageDTO imageDTO;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessTemplateInfoDTO {
+        private String id;
+        private String templateId;
+
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessContactInformation{
+        private String email;
+        private String phone1;
+        private String phone2;
+        private String address;
+        private String instagramUrl;
+        private String facebookUrl;
+        private String youtubeUrl;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PublicBusinessInformation{
+        private String name;
+        private String aboutUs;
+        private String ownerImageId;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class FooterContentDTO {
+        private BusinessContactInformation contactInfo;
+        private BusinessTimingDTO timings;
     }
 }

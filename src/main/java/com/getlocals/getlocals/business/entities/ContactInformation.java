@@ -19,6 +19,10 @@ public class ContactInformation implements Serializable {
     private String phone1;
     private String phone2;
 
+    private String instagramUrl;
+    private String facebookUrl;
+    private String youtubeUrl;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Business business;
 }

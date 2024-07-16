@@ -58,6 +58,12 @@ public class BusinessService {
     @Autowired
     private EmployeeInfoRepository employeeInfoRepository;
 
+    @Autowired
+    private BusinessTemplateRepo templateRepo;
+
+    @Autowired
+    private ContactInformationRepository contactInformationRepository;
+
 
     @Transactional
     public AuthenticationResponse registerBusiness(DTO.BusinessRegisterDTO businessRegisterDTO, String jwtToken) {
@@ -104,6 +110,19 @@ public class BusinessService {
                 .build();
         employeeInfoRepository.save(employeeInfo);
 
+        // Set the default template
+        BusinessTemplate template = BusinessTemplate.builder()
+                .business(business)
+                .templateId("067b7d1e-eb92-42e9-9ba0-1021933f6b83")
+                .build();
+        templateRepo.save(template);
+
+        ContactInformation information = ContactInformation.builder()
+                .business(business)
+                .build();
+        contactInformationRepository.save(information);
+
+
         return authService.refreshToken(jwtToken);
 
     }
@@ -126,11 +145,13 @@ public class BusinessService {
 
     public DTO.BusinessRegisterDTO getBusinessById(String businessId) {
         Business business = businessRepository.getReferenceById(businessId);
+        BusinessImage logo = imageRepository.getBusinessImageByBusiness_IdAndType(businessId, CustomEnums.BusinessImageTypeEnum.LOGO).orElse(null);
         return DTO.BusinessRegisterDTO.builder()
                 .businessType(business.getServiceType().getVal())
                 .name(business.getName())
                 .location(business.getLocation())
                 .aboutUs(business.getAboutUs())
+                .logo(logo != null ? logo.getId() : null)
                 .build();
     }
 
@@ -205,5 +226,91 @@ public class BusinessService {
         return ResponseEntity.ok(DTO.StringMessage.builder()
                 .message("Submitted request successfully!")
                 .build());
+    }
+
+    public ResponseEntity<?> getTemplateInformation(String businessUsername) {
+        BusinessTemplate template = templateRepo.getBusinessTemplateByBusiness_BusinessUsername(businessUsername).orElseThrow();
+
+        return ResponseEntity.ok(
+                DTO.BusinessTemplateInfoDTO.builder()
+                        .id(template.getBusiness().getId())
+                        .templateId(template.getTemplateId())
+                        .build());
+    }
+
+    public ResponseEntity<?> getBusinessContactInformation(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+
+        ContactInformation information = contactInformationRepository.getContactInformationByBusiness_Id(businessId).orElse(null);
+        if (information == null) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.ok(DTO.BusinessContactInformation.builder()
+                        .address(business.getLocation())
+                        .phone1(information.getPhone1())
+                        .phone2(information.getPhone2())
+                        .email(information.getEmail())
+                        .facebookUrl(information.getFacebookUrl())
+                        .instagramUrl(information.getInstagramUrl())
+                        .youtubeUrl(information.getYoutubeUrl())
+                        .build());
+    }
+
+    public ResponseEntity<?> createOrUpdateBusinessContactInformation(String businessId, DTO.BusinessContactInformation contactInformation) {
+        ContactInformation information = contactInformationRepository.getContactInformationByBusiness_Id(businessId).orElse(new ContactInformation());
+        information.setEmail(contactInformation.getEmail());
+        information.setPhone1(contactInformation.getPhone1());
+        information.setPhone2(contactInformation.getPhone2());
+        information.setInstagramUrl(contactInformation.getInstagramUrl());
+        information.setFacebookUrl(contactInformation.getFacebookUrl());
+        information.setYoutubeUrl(contactInformation.getYoutubeUrl());
+        if (information.getBusiness() == null) {
+            information.setBusiness(businessRepository.getReferenceById(businessId));
+        }
+
+        contactInformationRepository.save(information);
+        return ResponseEntity.ok(
+                DTO.StringMessage.builder()
+                        .message("Successfully Updated Contact Information")
+                        .build());
+    }
+
+    public ResponseEntity<?> getPublicBusinessInfo(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+        List<EmployeeInfo> owners = employeeInfoRepository.findAllByBusiness_IdAndPosition(businessId, CustomEnums.BusinessEmployeeTypeEnum.OWNER);
+        return ResponseEntity.ok(
+                DTO.PublicBusinessInformation.builder()
+                        .aboutUs(business.getAboutUs())
+                        .name(business.getName())
+                        .ownerImageId(!owners.isEmpty() ? owners.get(0).getBusinessImage().getId() : null)
+                        .build());
+    }
+
+    public ResponseEntity<?> getFooterContent(String businessId) {
+        Business business = businessRepository.getReferenceById(businessId);
+        BusinessTiming timings = business.getTiming();
+        ContactInformation information = business.getContactInformation();
+        return ResponseEntity.ok(
+                DTO.FooterContentDTO.builder()
+                        .contactInfo(DTO.BusinessContactInformation.builder()
+                                .address(business.getLocation())
+                                .phone1(information.getPhone1())
+                                .phone2(information.getPhone2())
+                                .email(information.getEmail())
+                                .facebookUrl(information.getFacebookUrl())
+                                .instagramUrl(information.getInstagramUrl())
+                                .youtubeUrl(information.getYoutubeUrl())
+                                .build())
+                        .timings(DTO.BusinessTimingDTO.builder()
+                                .monday(timings.getMonday())
+                                .tuesday(timings.getTuesday())
+                                .wednesday(timings.getWednesday())
+                                .thursday(timings.getThursday())
+                                .friday(timings.getFriday())
+                                .saturday(timings.getSaturday())
+                                .sunday(timings.getSunday())
+                                .build())
+                        .build()
+        );
     }
 }

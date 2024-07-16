@@ -41,6 +41,15 @@ public class Business implements Serializable {
     private String skipUrl;
     private String doorDashUrl;
 
+    @Column(unique = true)
+    private String businessUsername;
+
+    @OneToOne
+    private BusinessTiming timing;
+
+    @OneToOne
+    private ContactInformation contactInformation;
+
 
     public String getOwnerName() {
         return this.owner.getName();
